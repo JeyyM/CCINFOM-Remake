@@ -1,0 +1,75 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.vertical{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.square{
+    height: 10rem;
+    width: 10rem;
+    transition: all 0.5s;
+}
+
+.item-section {
+    min-height: 10rem;
+    padding: 2rem;
+    width: 40rem;
+    background: gray;
+    margin: 2rem auto;
+}
+
+.result-popup {
+    height: 50vh;
+    width: 50vw;
+    background-color: burlywood;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+
+  .whitesheet {
+    height: 100vh;
+    width: 100vw;
+    background-color: red;
+    opacity: 0.2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+  }
+
+  .button1{
+    height: 10rem;
+    width: 10rem;
+    background-color: red;
+    font-size: 2rem;
+    padding: 5rem;
+  }
