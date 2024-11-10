@@ -1,3 +1,7 @@
+/* GLOBAL RESET STUFF, Removed Browser CSS */
+/*FOR UNIFORMITY ONLY USE THE MEASUREMENT UNIT rem*/
+/*a rem is worth 10px*/
+
 *,
 *::after,
 *::before {

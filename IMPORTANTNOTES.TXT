@@ -1,0 +1,27 @@
+So important notes
+1. Install npm if you haven't, it is needed to run js stuff
+2. Once you have npm, when git pulling/cloning, do
+    npm Install
+- to get all dependencies such as the dependency for sql
+3. within the db-app folder make
+ .env
+file which is the environment variables, it is different depending on your
+sql workbench server details
+------------
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=fuckingpassword
+DB_NAME=dbhr
+BASE_URL=http://localhost:3000
+-------------
+- change to correct db name and also password
+4. In React the main thing you have to study is useState and useEffect
+5. Parameters being passed in react are called "props" so in case you see that term, thats what that means
+6. When making your own pages, put this at the very top
+- IMPORTANT!!!
+'use client';
+- this makes it interactable and not have to deal with serverside stuff
+- you might be confused as to why you cant click buttons, etc.
+7. RECORDING LINK:
+8. 
