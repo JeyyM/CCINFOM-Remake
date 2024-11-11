@@ -10,7 +10,8 @@ export default function Home() {
     <div className='vertical'>
       <h1>Main Menu</h1>
 
-      <Link href="/sample">SQL SAMPLE</Link>
+      <Link href="/query">Queries Sample</Link>
+      <Link href="/input">Adding Sample</Link>
 
       <Link href="/add">Add New Appointment</Link>
       <Link href="/appointments">Manage Appointments</Link>

@@ -77,3 +77,9 @@ body {
     font-size: 2rem;
     padding: 5rem;
   }
+
+  .horizontal {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
