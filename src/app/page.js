@@ -7,17 +7,13 @@ import { useState } from 'react';
 export default function Home() {
 
   return (
-    <div className='vertical'>
-      <h1>Main Menu</h1>
+    <div className='home-page background'>
+      <div className='home-page-buttons'>
+        <h1 className='title-text'>Blood Lab</h1>
+        <Link href="/appointments" className='large-button-1'>APPOINTMENTS</Link>
+      </div>
 
-      <Link href="/query">Queries Sample</Link>
-      <Link href="/input">Adding Sample</Link>
-
-      <Link href="/add">Add New Appointment</Link>
-      <Link href="/appointments">Manage Appointments</Link>
-      <Link href="/employees">Manage Employees</Link>
-      <Link href="/records">Manage Records</Link>
-      <Link href="/blood-tests">Manage Blood Tests</Link>
+      <img src="/home-wave.svg" className='home-wave' />
     </div>
   );
 }

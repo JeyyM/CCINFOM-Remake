@@ -8,6 +8,45 @@ export default function Appointments() {
       <div>
         <h1>Manage Appointments Page</h1>
         <Link href="..">Back</Link>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+        <h1>Manage Appointments Page</h1>
+
 
       </div>
   );
