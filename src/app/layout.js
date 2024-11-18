@@ -1,4 +1,6 @@
 import './css/styles.css';
+import './css/colors.css';
+import './css/fonts.css';
 import NavBar from './components/NavBar';
 
 export const metadata = {

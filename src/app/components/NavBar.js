@@ -29,27 +29,44 @@ export default function NavBar() {
     
       return (
         <nav className={`navbar ${isVisible ? '' : 'hidden'}`}>
-      <Link href="/"  className='to-home'>BLOOD LAB</Link>
+      <Link href="/"  className='to-home text-medium-dark-2'>BLOOD LAB</Link>
 
-      <Link className='nav-item' href="/appointments">
+      <div className='nav-pair'>
+      <Link className='nav-pill nav-pill-left nav-white' href="/appointments">
+        <h2>ADD</h2>
+      </Link>
+
+      <Link className='nav-pill nav-pill-right nav-white' href="/appointments">
+        <h2>VIEW</h2>
+      </Link>
+
+
+      </div>
+
+      <Link className='nav-item nav-white' href="/appointments">
         <h2>APPOINTMENTS</h2>
         <div className={`nav-shadow ${pathname === '/appointments' ? 'active' : ''}`}></div>
       </Link>
 
-      <Link className='nav-item' href="/employees">
+      <Link className='nav-item nav-white' href="/records">
+        <h2>PATIENTS</h2>
+        <div className={`nav-shadow ${pathname === '/records' ? 'active' : ''}`}></div>
+      </Link>
+
+      <Link className='nav-item nav-white' href="/employees">
         <h2>EMPLOYEES</h2>
         <div className={`nav-shadow ${pathname === '/employees' ? 'active' : ''}`}></div>
       </Link>
 
-      <Link className='nav-item' href="/blood-tests">
+      <Link className='nav-item nav-white' href="/blood-tests">
         <h2>TESTS</h2>
         <div className={`nav-shadow ${pathname === '/blood-tests' ? 'active' : ''}`}></div>
       </Link>
 
-      <Link className='nav-item' href="/records">
+      {/* <Link className='nav-item' href="/records">
         <h2>RECORDS</h2>
         <div className={`nav-shadow ${pathname === '/records' ? 'active' : ''}`}></div>
-      </Link>
+      </Link> */}
     </nav>
   );
 }

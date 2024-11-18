@@ -10,7 +10,7 @@ export default function Home() {
     <div className='home-page background'>
       <div className='home-page-buttons'>
         <h1 className='title-text'>Blood Lab</h1>
-        <Link href="/appointments" className='large-button-1'>APPOINTMENTS</Link>
+        <Link href="/appointments" className='text-medium-dark large-button-1'>NEW APPOINTMENT</Link>
       </div>
 
       <img src="/home-wave.svg" className='home-wave' />
