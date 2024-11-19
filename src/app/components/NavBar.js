@@ -32,11 +32,11 @@ export default function NavBar() {
       <Link href="/"  className='to-home text-medium-dark-2'>BLOOD LAB</Link>
 
       <div className='nav-pair'>
-      <Link className='nav-pill nav-pill-left nav-white' href="/appointments">
+      <Link className={`nav-pill nav-pill-left nav-white ${pathname === '/appointments' ? 'active' : ''}`} href="/appointments">
         <h2>ADD</h2>
       </Link>
 
-      <Link className='nav-pill nav-pill-right nav-white' href="/appointments">
+      <Link className={`nav-pill nav-pill-right nav-white ${pathname === '/appointments/view' ? 'active' : ''}`} href="/appointments/view">
         <h2>VIEW</h2>
       </Link>
 
@@ -45,7 +45,7 @@ export default function NavBar() {
 
       <Link className='nav-item nav-white' href="/appointments">
         <h2>APPOINTMENTS</h2>
-        <div className={`nav-shadow ${pathname === '/appointments' ? 'active' : ''}`}></div>
+        <div className={`nav-shadow ${pathname === '/appointments' || pathname === '/appointments/view' ? 'active' : ''}`}></div>
       </Link>
 
       <Link className='nav-item nav-white' href="/records">

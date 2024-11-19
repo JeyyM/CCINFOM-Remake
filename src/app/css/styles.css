@@ -11,6 +11,10 @@
   box-sizing: inherit;
 }
 
+button {
+  cursor: pointer;
+}
+
 html {
   font-size: 62.5%;
 }
@@ -96,7 +100,7 @@ body {
       var(--theme-2),
       transparent 45%
     ), */
-    var(--bg-color);
+      var(--bg-color);
 }
 
 .home-page {
@@ -123,7 +127,7 @@ body {
   height: auto;
   width: 35rem;
   padding: 1.5rem 4.5rem;
-  border-radius: 2rem;
+  border-radius: 3rem;
   text-decoration: none;
   display: flex;
   flex-direction: column;
@@ -131,6 +135,22 @@ body {
   justify-content: center;
   letter-spacing: 0.3rem;
   font-weight: 600 !important;
+}
+
+.medium-button-1 {
+  background-color: white;
+  height: min-content;
+  width: 25rem;
+  padding: 1.5rem 4.5rem;
+  border-radius: 3rem;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.3rem;
+  font-weight: 600 !important;
+  text-wrap: nowrap;
 }
 
 .home-wave {
@@ -152,7 +172,8 @@ body {
   height: 14rem;
   border-radius: 2rem;
 
-  background: linear-gradient(to top, var(--theme-3), transparent 80%), transparent;
+  background: linear-gradient(to top, var(--theme-3), transparent 80%),
+    transparent;
   padding-top: 2rem;
   padding-left: 20rem;
   display: flex;
@@ -165,7 +186,6 @@ body {
 .navbar .nav-active {
   height: 5rem;
 }
-
 
 .to-home {
   background: linear-gradient(to top, rgb(255, 255, 255), transparent 100%);
@@ -198,7 +218,8 @@ body {
   align-items: center;
 }
 
-.nav-pill.active, .nav-pill:hover{
+.nav-pill.active,
+.nav-pill:hover {
   background-color: white;
   color: var(--text-color-2);
 }
@@ -228,7 +249,11 @@ body {
   width: 100%;
   height: 0rem;
   border-top: 2px solid white;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.395), transparent 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.395),
+    transparent 100%
+  );
   transform: translateY(100%);
   transition: all 0.2s;
 }
@@ -237,7 +262,7 @@ body {
   height: 5rem;
 }
 
-.nav-shadow.active{
+.nav-shadow.active {
   height: 5rem;
 }
 
@@ -269,7 +294,7 @@ body {
   flex-direction: column;
   width: 45%;
   height: 100%;
-  justify-content: space-around;
+  padding: 0 2rem;
 }
 
 .appointments-right {
@@ -277,7 +302,9 @@ body {
   flex-direction: column;
   width: 55%;
   height: 100%;
-  justify-content: space-around;
+  /* justify-content: space-around; */
+  padding: 0 2rem;
+  gap: 1rem;
 }
 
 .appointments-section {
@@ -287,6 +314,10 @@ body {
   height: auto;
   width: 100%;
   gap: 1rem;
+}
+
+.appointments-section.left {
+  margin-bottom: 4rem;
 }
 
 .appointment-header {
@@ -308,7 +339,7 @@ body {
   border: none;
 }
 
-.pill-button-transparent{
+.pill-button-transparent {
   height: 2.5rem;
   padding: 0rem 1rem;
   background-color: transparent;
@@ -328,7 +359,228 @@ body {
   border-radius: 3rem;
 }
 
-.dropdown-item:focus {
+.dropdown-item-invert {
+  padding: 0.5rem 1rem;
+  border-radius: 3rem;
+  background-color: transparent;
+  border: 2px solid var(--theme-4);
+}
+
+.dropdown-item-2 {
+  background: linear-gradient(to right, var(--theme-4), var(--theme-4b)),
+    transparent;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem 0 2rem 0;
+}
+
+.view-order {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-choice {
+  width: 13rem;
+  border-radius: 2rem 2rem 0 0;
+  padding: 0.5rem;
+  background-color: var(--theme-4);
+  border: none;
+  background: linear-gradient(to right, var(--theme-4), var(--theme-4b)),
+    transparent;
+}
+
+/* .dropdown-item:focus {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+} */
+
+.test-selection {
+  width: 100%;
+  height: 35rem;
+  border: 2px solid white;
+  background: linear-gradient(to bottom left, var(--theme-3), var(--theme-1)),
+    transparent;
+  border-radius: 2rem;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.test-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.add-test {
+  width: 100%;
+  border: none;
+}
+
+.view-appointments-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.view-appointments-menu {
+  margin-top: 15rem;
+  height: 80%;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.view-grouper {
+  display: flex;
+  gap: 3rem;
+}
+
+.view-choices {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.view-choice-name {
+  background-color: transparent;
+  border: none;
+  transition: all 0.5s;
+}
+
+.view-divider {
+  height: 3.5rem;
+  width: 2px;
+  background-color: white;
+}
+
+.view-sort-by {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.view-nav {
+  width: 100%;
+  height: min-content;
+  display: flex;
+  align-items: space-between;
+  justify-content: center;
+}
+
+.set-collection {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+.item-set {
+  width: 90%;
+  height: auto;
+  margin: 0 auto;
+  display: flex;
+  border-radius: 3rem 0 3rem 0;
+  overflow: hidden;
+  position: relative;
+  filter: drop-shadow(-0.5rem 0px 0px white)
+    drop-shadow(0.5rem 0px 0px var(--text-color-2));
+}
+
+.set-q1 {
+  width: 25%;
+  height: 100%;
+  background: linear-gradient(to right, var(--theme-4), var(--theme-4b)),
+    transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1.5rem;
+}
+
+.set-date {
+  width: 100%;
+  height: auto;
+  padding: 0.5rem;
+  background-color: white;
+  border-radius: 2rem 0 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.set-data {
+  width: 75%;
+  height: 100%;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+
+  background: linear-gradient(to right, var(--theme-5), var(--theme-6)),
+    transparent;
+  }
+
+.set-column-1 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 1rem 0;
+  gap: 1rem;
+}
+
+.set-column-2 {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.set-pair {
+  height: 100%;
+  display: flex;
+  gap: 1rem;
+  
+}
+
+.pair-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.input-small {
+  padding: 1rem;
+  height: 3rem;
+  background-color: white;
+  border-radius: 2rem;
+  border: none;
+}
+
+.neon-button {
+  border-radius: 3rem;
+  padding: 1rem 2rem;
+  background-color: var(--theme-4);
+  outline: none;
+  border: none;
+  width: 80%;;
+}
+
+.neon-button-outline {
+  width: 80%;
+  border-radius: 3rem;
+  padding: 1rem 2rem;
+  background-color: transparent;
+  border: 2px solid var(--theme-4);
+  outline: none;
 }
