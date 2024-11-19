@@ -48,9 +48,9 @@ export default function NavBar() {
         <div className={`nav-shadow ${pathname === '/appointments' || pathname === '/appointments/view' ? 'active' : ''}`}></div>
       </Link>
 
-      <Link className='nav-item nav-white' href="/records">
+      <Link className='nav-item nav-white' href="/patients">
         <h2>PATIENTS</h2>
-        <div className={`nav-shadow ${pathname === '/records' ? 'active' : ''}`}></div>
+        <div className={`nav-shadow ${pathname === '/patients' ? 'active' : ''}`}></div>
       </Link>
 
       <Link className='nav-item nav-white' href="/employees">

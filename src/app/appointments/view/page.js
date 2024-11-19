@@ -148,7 +148,7 @@ export default function Appointments() {
               className="dropdown-item-2 detail-text-dark">
               <option value="appointment_date">Schedule Date</option>
               <option value="creation_date">Creation Date</option>
-              <option value="total_bill">Total Bill</option>
+              <option value="total">Total Bill</option>
               <option value="last_name">Name</option>
             </select>
           </div>
