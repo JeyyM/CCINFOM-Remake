@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import PersonSet from '@/app/components/PersonSet';
+import PatientSet from '@/app/components/PatientSet';
 import PatientForm from '@/app/components/PatientForm';
 
-export default function Appointments() {
+export default function Patients() {
   const [sortChoice, setSortChoice] = useState('id');
   const [orderChoice, setOrderChoice] = useState('desc');
 
@@ -227,14 +227,14 @@ export default function Appointments() {
               </select>
             </div>
 
-            <button className='medium-button-1' onClick={() => setSelectedPatient({})}>ADD PATIENT</button>
+            <button className='medium-button-1 detail-text-dark' onClick={() => setSelectedPatient({})}>ADD PATIENT</button>
 
           </div>
         </div>
 
         <div className="set-collection">
           {filteredSets.map((set, index) => (
-            <PersonSet key={index} set={set} onEdit={() => setSelectedPatient(set)} type="edit" />
+            <PatientSet key={index} set={set} onEdit={() => setSelectedPatient(set)} type="edit" />
           ))}
         </div>
 

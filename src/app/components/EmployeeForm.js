@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 
-const PatientForm = ({ selectedPatient, setSelectedPatient, onClose, handleSave }) => {
-    if (!selectedPatient) return null;
+const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSave }) => {
+    if (!selectedEmployee) return null;
 
-    const [formData, setFormData] = useState({ ...selectedPatient });
+    const [formData, setFormData] = useState({ ...selectedEmployee,
+        status: selectedEmployee.status !== null && selectedEmployee.status !== undefined ? selectedEmployee.status : true,
+     });
     const [errorState, setErrorState] = useState({});
 
     useEffect(() => {
-        setFormData({ ...selectedPatient });
+        setFormData({ ...selectedEmployee,
+            status: selectedEmployee.status !== null && selectedEmployee.status !== undefined ? selectedEmployee.status : true});
         setErrorState({});
-    }, [selectedPatient]);
+    }, [selectedEmployee]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -29,10 +32,19 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, onClose, handleSave 
         if (!formData.street) errors.street = 'Street is required.';
         if (!formData.city) errors.city = 'City is required.';
         if (!formData.province) errors.province = 'Province is required.';
+        if (!formData.hire_date) errors.hire_date = 'Hire date is required.';
+        if (!formData.job) errors.job = 'Job is required.';
+        if (!formData.monthly_salary) errors.monthly_salary = 'Monthly salary is required.';
+        // if (formData.status === undefined || formData.status === null)
+        //     errors.status = 'Status is required.';
 
         setErrorState(errors);
 
         return Object.keys(errors).length === 0;
+    };
+
+    const toggleStatus = () => {
+        setFormData((prev) => ({ ...prev, status: !prev.status }));
     };
 
     const handleSubmit = (e) => {
@@ -47,10 +59,11 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, onClose, handleSave 
     return (
         <>
             <div className="popup-whitesheet" onClick={onClose}></div>
-            <div className="patient-form">
+            <div className="employee-form">
                 <form className="pop-up-form" onSubmit={handleSubmit}>
-                    <h2 className='text-large-white-bold'>PATIENT FORM</h2>
-                    <div className='form-row'>
+                    <h2 className="text-large-white-bold">EMPLOYEE FORM</h2>
+
+                    <div className="form-row">
                         <div className="form-group">
                             <label className="text-medium-white-bold">First Name</label>
                             <input
@@ -62,7 +75,6 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, onClose, handleSave 
                             />
                             {errorState.first_name && <span className="warning-text">{errorState.first_name}</span>}
                         </div>
-
                         <div className="form-group">
                             <label className="text-medium-white-bold">Last Name</label>
                             <input
@@ -74,7 +86,6 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, onClose, handleSave 
                             />
                             {errorState.last_name && <span className="warning-text">{errorState.last_name}</span>}
                         </div>
-
                         <div className="form-group">
                             <label className="text-medium-white-bold">Birthday</label>
                             <input
@@ -86,7 +97,6 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, onClose, handleSave 
                             />
                             {errorState.birthday && <span className="warning-text">{errorState.birthday}</span>}
                         </div>
-
                     </div>
 
                     <div className='form-row'>
@@ -159,9 +169,6 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, onClose, handleSave 
                             />
                             {errorState.city && <span className="warning-text">{errorState.city}</span>}
                         </div>
-                    </div>
-
-                    <div className='form-row'>
                         <div className="form-group">
                             <label className="text-medium-white-bold">Province</label>
                             <input
@@ -174,11 +181,59 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, onClose, handleSave 
                             />
                             {errorState.province && <span className="warning-text">{errorState.province}</span>}
                         </div>
+                    </div>
 
-                        <button type="button" className='large-button-outline detail-text-white' onClick={() => setSelectedPatient(null)}>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label className="text-medium-white-bold">Hire Date</label>
+                            <input
+                                type="date"
+                                name="hire_date"
+                                value={formData.hire_date || ''}
+                                onChange={handleChange}
+                                className="form-input detail-text-dark"
+                            />
+                            {errorState.hire_date && <span className="warning-text">{errorState.hire_date}</span>}
+                        </div>
+                        <div className="form-group">
+                            <label className="text-medium-white-bold">Job</label>
+                            <input
+                                type="text"
+                                name="job"
+                                value={formData.job || ''}
+                                onChange={handleChange}
+                                placeholder="Job"
+                                className="form-input detail-text-dark"
+                            />
+                            {errorState.job && <span className="warning-text">{errorState.job}</span>}
+                        </div>
+                        <div className="form-group">
+                            <label className="text-medium-white-bold">Monthly Salary</label>
+                            <input
+                                type="number"
+                                name="monthly_salary"
+                                value={formData.monthly_salary || ''}
+                                onChange={handleChange}
+                                placeholder="Monthly Salary"
+                                className="form-input detail-text-dark"
+                            />
+                            {errorState.monthly_salary && <span className="warning-text">{errorState.monthly_salary}</span>}
+                        </div>
+                    </div>
+
+                    <div className="form-row">
+                        {selectedEmployee.status !== null && selectedEmployee.status !== undefined && (formData.status ? <button type="button" className="large-button-dark detail-text-light" onClick={toggleStatus}>
+                            HIRED
+                        </button> : 
+                        <button type="button" className="large-button-red detail-text-white" onClick={toggleStatus}>
+                            FIRED
+                        </button>)}
+                        <button type="button" className="large-button-outline detail-text-white" onClick={onClose}>
                             Cancel
                         </button>
-                        <button type="submit" className='large-button-neon detail-text-dark'>Save</button>
+                        <button type="submit" className="large-button-neon detail-text-dark">
+                            Save
+                        </button>
                     </div>
                 </form>
             </div>
@@ -186,4 +241,4 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, onClose, handleSave 
     );
 };
 
-export default PatientForm;
+export default EmployeeForm;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import PersonSet from './PersonSet';
+import PatientSet from './PatientSet';
 
 const SelectPatients = ({ patientList, onClose, handleSave }) => {
     const [searchValue, setSearchValue] = useState('');
@@ -76,7 +76,7 @@ const SelectPatients = ({ patientList, onClose, handleSave }) => {
 
                     {filteredSets.map((set, index) => (
                         <div key={index} onClick={() => {handleSave(set); onClose();}}>
-                        <PersonSet set={set} type="select" />
+                        <PatientSet set={set} type="select" />
                         </div>
                     ))}
 

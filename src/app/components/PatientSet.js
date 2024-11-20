@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PersonSet = ({ set, onEdit, type }) => {
+const PatientSet = ({ set, onEdit, type }) => {
   const months = [
     "JAN", "FEB", "MAR", "APR", "MAY", "JUN", 
     "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
@@ -48,4 +48,4 @@ const formatDate = (dateString) => {
   );
 };
 
-export default PersonSet;
+export default PatientSet;
