@@ -4,10 +4,13 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import EmployeeSet from '@/app/components/EmployeeSet';
 import EmployeeForm from '@/app/components/EmployeeForm';
+import SelectEmployee from '@/app/components/SelectEmployee';
 
 export default function Employees() {
   const [sortChoice, setSortChoice] = useState('id');
   const [orderChoice, setOrderChoice] = useState('desc');
+
+  const [postUpdate, setPostUpdate] = useState(true);
 
   const handleSortChange = (e) => {
     setSortChoice(e.target.value);
@@ -16,6 +19,7 @@ export default function Employees() {
   const [searchValue, setSearchValue] = useState('');
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [editing, setEditing] = useState(false);
 
   const handleSave = (employee) => {
     if (employee.id) {
@@ -30,7 +34,7 @@ export default function Employees() {
     }
     setSelectedEmployee(null);
   };
-
+  
   const data = [
     {
       id: 1,
@@ -235,9 +239,8 @@ export default function Employees() {
       comparison = a.monthly_salary - b.monthly_salary;
   }
 
-    return orderChoice === 'desc' ? -comparison : comparison; // Adjust based on ascending/descending order
+    return orderChoice === 'desc' ? -comparison : comparison;
   });
-
 
     const assignManager = (data) => {
       return data.map((employee) => {
@@ -254,18 +257,59 @@ export default function Employees() {
     useEffect(() => {
       const updatedData = assignManager(collectionData);
       setCollectionData(updatedData);
-    }, []);
+    }, [postUpdate]);
 
+    const [showManage, setShowManage] = useState(false);
+
+    const modifyManager = (employeeId, newStaff) => {
+      setCollectionData((prev) =>
+        prev.map((employee) => {
+          if (employee.id === employeeId) {
+            return {
+              ...employee,
+              manager_of: newStaff,
+            };
+          } else if (newStaff.includes(employee.id)) {
+            return {
+              ...employee,
+              manager: employeeId,
+            };
+          } else if (employee.manager === employeeId && !newStaff.includes(employee.id)) {
+            return {
+              ...employee,
+              manager: null,
+            };
+          }
+          return employee;
+        })
+      );
+
+      setPostUpdate(!postUpdate);
+    };
 
   return (
     <div className='view-appointments-page background'>
 
-      {selectedEmployee && (
+      {editing && (
         <EmployeeForm
           selectedEmployee={selectedEmployee}
           setSelectedEmployee={setSelectedEmployee}
-          onClose={() => setSelectedEmployee(null)}
+          onClose={() => setEditing(false)}
           handleSave={handleSave}
+        />
+      )}
+
+      {showManage && (
+        <SelectEmployee
+          selectedEmployee={selectedEmployee}
+          setSelectedEmployee={setSelectedEmployee}
+          employeeList={collectionData}
+          onClose={() => setShowManage(false)}
+          handleSave={(newStaff) => {
+            modifyManager(selectedEmployee.id, newStaff);
+            setShowManage(false);
+          }}
+          type={"manage"}
         />
       )}
 
@@ -311,8 +355,13 @@ export default function Employees() {
 
         <div className="set-collection">
           {filteredSets.map((set, index) => (
-            <EmployeeSet key={index} set={set} onEdit={() => setSelectedEmployee(set)} type="edit" />
-          ))}
+            <EmployeeSet key={index} set={set} onEdit={() => {
+                setSelectedEmployee(set);
+                setEditing(true);
+              }} onManage={() => {
+                setSelectedEmployee(set)
+                setShowManage(true);
+                }} type="edit" />))}
         </div>
 
       </div>

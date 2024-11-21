@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSave }) => {
-    if (!selectedEmployee) return null;
+    // if (!selectedEmployee) return null;
 
     const [formData, setFormData] = useState({ ...selectedEmployee,
         status: selectedEmployee.status !== null && selectedEmployee.status !== undefined ? selectedEmployee.status : true,

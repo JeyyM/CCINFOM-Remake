@@ -39,7 +39,7 @@ const SelectPatients = ({ patientList, onClose, handleSave }) => {
     return (
         <>
             <div className="popup-whitesheet" onClick={onClose}></div>
-            <div className="select-patient-form">
+            <div className="select-patient-form" onClick={(e) => e.stopPropagation()}>
                 <div className='select-menu'>
                     <div className='view-nav' style={{ justifyContent: "space-between" }}>
 
@@ -75,7 +75,7 @@ const SelectPatients = ({ patientList, onClose, handleSave }) => {
                     </div>
 
                     {filteredSets.map((set, index) => (
-                        <div key={index} onClick={() => {handleSave(set); onClose();}}>
+                        <div key={index} onClick={() => {handleSave(set); onClose();}} className='object-selector'>
                         <PatientSet set={set} type="select" />
                         </div>
                     ))}

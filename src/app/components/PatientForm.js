@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const PatientForm = ({ selectedPatient, setSelectedPatient, onClose, handleSave }) => {
+const PatientForm = ({ selectedPatient, setSelectedPatient, patientList, onClose, handleSave }) => {
     if (!selectedPatient) return null;
 
     const [formData, setFormData] = useState({ ...selectedPatient });

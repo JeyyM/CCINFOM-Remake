@@ -58,15 +58,15 @@ export default function NavBar() {
         <div className={`nav-shadow ${pathname === '/employees' ? 'active' : ''}`}></div>
       </Link>
 
-      <Link className='nav-item nav-white' href="/blood-tests">
+      <Link className='nav-item nav-white' href="/tests">
         <h2>TESTS</h2>
-        <div className={`nav-shadow ${pathname === '/blood-tests' ? 'active' : ''}`}></div>
+        <div className={`nav-shadow ${pathname === '/tests' ? 'active' : ''}`}></div>
       </Link>
 
-      {/* <Link className='nav-item' href="/records">
+      <Link className='nav-item nav-white' href="/records">
         <h2>RECORDS</h2>
         <div className={`nav-shadow ${pathname === '/records' ? 'active' : ''}`}></div>
-      </Link> */}
+      </Link>
     </nav>
   );
 }

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-export default function BloodTests() {
+export default function Tests() {
   return (
       <div>
         <h1>Manage Blood Tests Page</h1>
