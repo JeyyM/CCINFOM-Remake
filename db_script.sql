@@ -37,18 +37,21 @@ CREATE TABLE REF_job (
     job_id INT AUTO_INCREMENT PRIMARY KEY,
     job_name VARCHAR(45) NOT NULL UNIQUE,
     job_description TEXT,
-    min_salary DECIMAL(10, 2) CHECK (min_salary >= 0),
-    max_salary DECIMAL(10, 2) CHECK (max_salary > min_salary)
+    min_salary DECIMAL(10, 2),
+    max_salary DECIMAL(10, 2),
+    CONSTRAINT valid_range CHECK (min_salary >= 0),
+    CONSTRAINT valid_max CHECK (max_salary > min_salary)
 );
 
 -- Create staff table
 CREATE TABLE staff (
     person_id INT PRIMARY KEY,
     job_id INT NOT NULL,
-    monthly_salary DECIMAL(10, 2) NOT NULL CHECK (monthly_salary >= 0),
+    monthly_salary DECIMAL(10, 2) NOT NULL,
     status ENUM('Active', 'Inactive') NOT NULL DEFAULT 'Active',
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
-    FOREIGN KEY (job_id) REFERENCES REF_job(job_id) ON DELETE RESTRICT
+    FOREIGN KEY (job_id) REFERENCES REF_job(job_id) ON DELETE RESTRICT,
+    CONSTRAINT valid_salary CHECK (monthly_salary >= 0)
 );
 
 -- Create patient table
@@ -73,10 +76,12 @@ CREATE TABLE appointment (
 -- Create bill table
 CREATE TABLE bill (
     appointment_id INT PRIMARY KEY,
-    total_bill DECIMAL(10, 2) NOT NULL CHECK (total_bill >= 0),
-    total_paid DECIMAL(10, 2) NOT NULL CHECK (total_paid >= 0 AND total_paid <= total_bill),
+    total_bill DECIMAL(10, 2) NOT NULL,
+    total_paid DECIMAL(10, 2) NOT NULL,
     status ENUM('Pending', 'Paid', 'Overdue') NOT NULL DEFAULT 'Pending',
-    FOREIGN KEY (appointment_id) REFERENCES appointment(appointment_id) ON DELETE CASCADE
+    FOREIGN KEY (appointment_id) REFERENCES appointment(appointment_id) ON DELETE CASCADE,
+    CONSTRAINT valid_bill CHECK (total_bill >= 0),
+    CONSTRAINT valid_paid CHECK (total_paid >= 0 AND total_paid <= total_bill)
 );
 
 -- Create REF_test_type table
