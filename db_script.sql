@@ -1,13 +1,6 @@
--- Drop existing tables if they exist
-DROP TABLE IF EXISTS appointment_result;
-DROP TABLE IF EXISTS REF_test_type;
-DROP TABLE IF EXISTS bill;
-DROP TABLE IF EXISTS appointment;
-DROP TABLE IF EXISTS patient;
-DROP TABLE IF EXISTS staff;
-DROP TABLE IF EXISTS REF_job;
-DROP TABLE IF EXISTS person;
-DROP TABLE IF EXISTS person_address;
+DROP DATABASE IF EXISTS medical_app;
+CREATE DATABASE medical_app;
+USE medical_app;
 
 -- Create person_address table
 CREATE TABLE person_address (
