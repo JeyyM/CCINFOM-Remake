@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+// WAS INITIALLY USED FOR DATE SELECTION, DEPRECATED, DONT USE
+
 export default function DateDropdown({
     //  These are set so that it is adaptable to the page's states
     selectedMonth,

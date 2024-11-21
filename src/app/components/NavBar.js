@@ -5,40 +5,41 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function NavBar() {
-      const pathname = usePathname();
+  // 
+  const pathname = usePathname();
 
-      const [isVisible, setIsVisible] = useState(true);
-      const [lastScrollY, setLastScrollY] = useState(0);
-    
-      const handleScroll = () => {
-        const currentScrollY = window.scrollY;
-    
-        if (currentScrollY > lastScrollY) {
-          setIsVisible(false);
-        } else {
-          setIsVisible(true);
-        }
-    
-        setLastScrollY(currentScrollY);
-      };
-    
-      useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-      }, [lastScrollY]);
-    
-      return (
-        <nav className={`navbar ${isVisible ? '' : 'hidden'}`}>
-      <Link href="/"  className='to-home text-medium-dark-2'>BLOOD LAB</Link>
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY) {
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+
+    setLastScrollY(currentScrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
+  return (
+    <nav className={`navbar ${isVisible ? '' : 'hidden'}`}>
+      <Link href="/" className='to-home text-medium-dark-2'>BLOOD LAB</Link>
 
       <div className='nav-pair'>
-      <Link className={`nav-pill nav-pill-left nav-white ${pathname === '/appointments' ? 'active' : ''}`} href="/appointments">
-        <h2>ADD</h2>
-      </Link>
+        <Link className={`nav-pill nav-pill-left nav-white ${pathname === '/appointments' ? 'active' : ''}`} href="/appointments">
+          <h2>ADD</h2>
+        </Link>
 
-      <Link className={`nav-pill nav-pill-right nav-white ${pathname === '/appointments/view' ? 'active' : ''}`} href="/appointments/view">
-        <h2>VIEW</h2>
-      </Link>
+        <Link className={`nav-pill nav-pill-right nav-white ${pathname === '/appointments/view' ? 'active' : ''}`} href="/appointments/view">
+          <h2>VIEW</h2>
+        </Link>
 
 
       </div>

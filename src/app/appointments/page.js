@@ -8,43 +8,10 @@ import SelectPatients from '../components/SelectPatients';
 import SelectEmployee from '../components/SelectEmployee';
 
 export default function Appointments() {
-  const [patientError, setPatientError] = useState('Select a patient.');
-  const [staffError, setStaffError] = useState('Select a staff.');
-  const [monthError, setMonthError] = useState('Schedule must be set in the future (validate)');
-
-  const [testError, setTestError] = useState('Select at least 1 test');
-  const [testError2, setTestError2] = useState('No more tests can be added');
-
-  const [selectedPatient, setSelectedPatient] = useState(null);
-  const [keptPatient, setKeptPatient] = useState(null);
-  const [selectingPatient, setSelectingPatient] = useState(false);
-
-  const today = new Date();
-  const currentYear = today.getFullYear();
-  const currentMonth = String(today.getMonth() + 1).padStart(2, '0');
-  const currentDay = String(today.getDate()).padStart(2, '0');
-  const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
-
-  const currentHour = today.getHours();
-  const currentMinute = String(today.getMinutes()).padStart(2, '0');
-
-  const period = currentHour >= 12 ? 'PM' : 'AM';
-  const hour12 = currentHour % 12 === 0 ? 12 : currentHour % 12;
-
-  const [selectedDate, setSelectedDate] = useState(currentDate);
-  const handleDateChange = (e) => {
-    setSelectedDate(e.target.value);
-  };
-
-  const [selectedHour, setSelectedHour] = useState(String(hour12).padStart(2, '0'));
-  const [selectedMinute, setSelectedMinute] = useState(currentMinute);
-  const [selectedPeriod, setSelectedPeriod] = useState(period);
-
-  const [selectedTests, setSelectedTests] = useState([{ test: "", price: "0" }]);
-
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [showEmployees, setShowEmployees] = useState(false);
-
+  // PRESET DATA
+  // Change to queried data
+  // NOTE, AN ID IS IMPLEMENTED. NOT SURE HOW ITS GOING TO BE WITH THE ACTUAL DB
+  // THE ID IS BEING ADDED FROM THE FUNCTIONS BY DOING Math.max() SO IT ISNT ACCURATE
   const patientData = [
     {
       id: 1,
@@ -341,9 +308,6 @@ export default function Appointments() {
     },
   ];
 
-  const [patientList, setPatientList] = useState(patientData);
-  const [employeeList, setEmployeeList] = useState(employeeData);
-
   const availableTests = [
     { name: "Blood Test 1", price: "1000" },
     { name: "Blood Test 2", price: "1500" },
@@ -351,6 +315,67 @@ export default function Appointments() {
     { name: "Blood Test 4", price: "2500" },
     { name: "Blood Test 5", price: "3000" }
   ];
+
+  // OVERARCHING DATA HOLDERS
+  const [patientList, setPatientList] = useState(patientData);
+  const [employeeList, setEmployeeList] = useState(employeeData);
+
+  // WHERE PATIENT DATA IS SET
+  const [selectedPatient, setSelectedPatient] = useState(null); // FOR THE MENU
+  const [keptPatient, setKeptPatient] = useState(null); // THIS PART KEEPS THE DATA
+  const [selectingPatient, setSelectingPatient] = useState(false); // TO TOGGLE THE MENU
+
+  const handleSavePatient = (patient) => {
+    if (patient.id) {
+      // lets save the patient saving for after the submission
+      // setPatientList((prev) =>
+      //   prev.map((p) => (p.id === patient.id ? patient : p))
+      // );
+      setKeptPatient(patient);
+    } else {
+      const newId = patientList.length ? Math.max(...patientList.map((p) => p.id)) + 1 : 1;
+      const newPatient = { ...patient, id: newId };
+      setPatientList((prev) => [...prev, newPatient]);
+      setKeptPatient(newPatient);
+    }
+  };
+
+  // WHERE EMPLOYEE DATA IS SET
+  const [showEmployees, setShowEmployees] = useState(false); // FOR THE MENU
+  const [selectedEmployee, setSelectedEmployee] = useState(null); // HOLDS EMPLOYEE DATA
+
+  // ERROR MESSAGES FOR THE VALIDATIONS, MAKE "" TO BE BLANK
+  const [patientError, setPatientError] = useState('Select a patient.');
+  const [staffError, setStaffError] = useState('Select a staff.');
+  const [monthError, setMonthError] = useState('Schedule must be set in the future (validate)');
+  const [testError, setTestError] = useState('Select at least 1 test');
+  const [testError2, setTestError2] = useState('No more tests can be added');
+
+  // FOR TIME KEEPING AND FORMATTING TO SQL
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = String(today.getMonth() + 1).padStart(2, '0');
+  const currentDay = String(today.getDate()).padStart(2, '0');
+  const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+
+  const currentHour = today.getHours();
+  const currentMinute = String(today.getMinutes()).padStart(2, '0');
+
+  // FOR AM/PM
+  const period = currentHour >= 12 ? 'PM' : 'AM';
+  const hour12 = currentHour % 12 === 0 ? 12 : currentHour % 12;
+
+  const [selectedDate, setSelectedDate] = useState(currentDate);
+  const [selectedHour, setSelectedHour] = useState(String(hour12).padStart(2, '0'));
+  const [selectedMinute, setSelectedMinute] = useState(currentMinute);
+  const [selectedPeriod, setSelectedPeriod] = useState(period);
+
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value);
+  };
+
+  // FOR SELECTING THE TESTS
+  const [selectedTests, setSelectedTests] = useState([{ test: "", price: "0" }]);
 
   const handleTestChange = (index, selectedTest) => {
     const updatedTests = [...selectedTests];
@@ -378,23 +403,9 @@ export default function Appointments() {
     return selectedTests.reduce((sum, test) => sum + parseInt(test.price), 0);
   };
 
-  const handleSavePatient = (patient) => {
-    if (patient.id) {
-      // lets save the patient saving for after the submission
-      // setPatientList((prev) =>
-      //   prev.map((p) => (p.id === patient.id ? patient : p))
-      // );
-      setKeptPatient(patient);
-    } else {
-      const newId = patientList.length ? Math.max(...patientList.map((p) => p.id)) + 1 : 1;
-      const newPatient = { ...patient, id: newId };
-      setPatientList((prev) => [...prev, newPatient]);
-      setKeptPatient(newPatient);
-    }
-  };
-
   return (
     <div className='appointments-page background'>
+      {/* When adding new patient */}
       {selectedPatient && (
         <PatientForm
           selectedPatient={selectedPatient}
@@ -404,6 +415,7 @@ export default function Appointments() {
           handleSave={handleSavePatient}
         />)}
 
+      {/* When picking an existing patient */}
       {selectingPatient && (
         <SelectPatients
           patientList={patientList}
@@ -411,6 +423,7 @@ export default function Appointments() {
           handleSave={handleSavePatient}
         />)}
 
+      {/* When picking an existing employee */}
       {showEmployees && (
         <SelectEmployee
           selectedEmployee={selectedEmployee}

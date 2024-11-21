@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
+// FOR CREATING A NEW EMPLOYEE/EDITING EMPLOYEE DETAILS
 const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSave }) => {
-    // if (!selectedEmployee) return null;
-
-    const [formData, setFormData] = useState({ ...selectedEmployee,
+    // WHERE FORM DATA IS KEPT AS A DICTIONARY/OBJECT
+    const [formData, setFormData] = useState({
+        ...selectedEmployee,
+        // FOR CHANGING HIRED/FIRED
         status: selectedEmployee.status !== null && selectedEmployee.status !== undefined ? selectedEmployee.status : true,
-     });
-    const [errorState, setErrorState] = useState({});
-
-    useEffect(() => {
-        setFormData({ ...selectedEmployee,
-            status: selectedEmployee.status !== null && selectedEmployee.status !== undefined ? selectedEmployee.status : true});
-        setErrorState({});
-    }, [selectedEmployee]);
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -20,6 +15,24 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
         setErrorState((prev) => ({ ...prev, [name]: '' }));
     };
 
+    // TO CHANGE HIRED/FIRED
+    const toggleStatus = () => {
+        setFormData((prev) => ({ ...prev, status: !prev.status }));
+    };
+
+    // FOR STATUSLESS/NEW EMPLOYEES
+    useEffect(() => {
+        setFormData({
+            ...selectedEmployee,
+            status: selectedEmployee.status !== null && selectedEmployee.status !== undefined ? selectedEmployee.status : true
+        });
+        setErrorState({});
+    }, [selectedEmployee]);
+
+    // TO HOLD THE ERRORS
+    const [errorState, setErrorState] = useState({});
+
+    // FOR ERROR CHECKING, IS INCOMPLETE/UNSPECIFIC
     const validateForm = () => {
         const errors = {};
 
@@ -35,18 +48,13 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
         if (!formData.hire_date) errors.hire_date = 'Hire date is required.';
         if (!formData.job) errors.job = 'Job is required.';
         if (!formData.monthly_salary) errors.monthly_salary = 'Monthly salary is required.';
-        // if (formData.status === undefined || formData.status === null)
-        //     errors.status = 'Status is required.';
 
         setErrorState(errors);
 
         return Object.keys(errors).length === 0;
     };
 
-    const toggleStatus = () => {
-        setFormData((prev) => ({ ...prev, status: !prev.status }));
-    };
-
+    // SENDS FORM DATA TO THE ORIGINAL PAGE
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -224,10 +232,10 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
                     <div className="form-row">
                         {selectedEmployee.status !== null && selectedEmployee.status !== undefined && (formData.status ? <button type="button" className="large-button-dark detail-text-light" onClick={toggleStatus}>
                             HIRED
-                        </button> : 
-                        <button type="button" className="large-button-red detail-text-white" onClick={toggleStatus}>
-                            FIRED
-                        </button>)}
+                        </button> :
+                            <button type="button" className="large-button-red detail-text-white" onClick={toggleStatus}>
+                                FIRED
+                            </button>)}
                         <button type="button" className="large-button-outline detail-text-white" onClick={onClose}>
                             Cancel
                         </button>

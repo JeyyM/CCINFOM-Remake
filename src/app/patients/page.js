@@ -6,31 +6,6 @@ import PatientSet from '@/app/components/PatientSet';
 import PatientForm from '@/app/components/PatientForm';
 
 export default function Patients() {
-  const [sortChoice, setSortChoice] = useState('id');
-  const [orderChoice, setOrderChoice] = useState('desc');
-
-  const handleSortChange = (e) => {
-    setSortChoice(e.target.value);
-  };
-
-  const [searchValue, setSearchValue] = useState('');
-
-  const [selectedPatient, setSelectedPatient] = useState(null);
-
-  const handleSave = (patient) => {
-    if (patient.id) {
-      setCollectionData((prev) =>
-        prev.map((p) => (p.id === patient.id ? patient : p))
-      );
-    } else {
-      // NOTE, I PUT THIS HERE FOR THE INCREASE OF IDS, THIS MIGHT HAVE TO BE REMOVED SINCE 
-      // WE CAN USE AUTO ITERATION IN SQL
-      const newId = Math.max(...collectionData.map((p) => p.id)) + 1;
-      setCollectionData((prev) => [...prev, { ...patient, id: newId }]);
-    }
-    setSelectedPatient(null);
-  };
-
   const data = [
     {
       id: 1,
@@ -154,8 +129,39 @@ export default function Patients() {
     },
   ];
 
+  // OVERARCHING DATA
   const [collectionData, setCollectionData] = useState(data);
 
+  // PATIENT DETAILS
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
+  const handleSave = (patient) => {
+    if (patient.id) {
+      // EXISTING
+      setCollectionData((prev) =>
+        prev.map((p) => (p.id === patient.id ? patient : p))
+      );
+    } else {
+      // NEW
+      // NOTE, I PUT THIS HERE FOR THE INCREASE OF IDS, THIS MIGHT HAVE TO BE REMOVED SINCE 
+      // WE CAN USE AUTO ITERATION IN SQL
+      const newId = Math.max(...collectionData.map((p) => p.id)) + 1;
+      setCollectionData((prev) => [...prev, { ...patient, id: newId }]);
+    }
+    setSelectedPatient(null);
+  };
+
+  // SORTERS AND SEARCHER
+  const [sortChoice, setSortChoice] = useState('id');
+  const [orderChoice, setOrderChoice] = useState('desc');
+
+  const handleSortChange = (e) => {
+    setSortChoice(e.target.value);
+  };
+
+  const [searchValue, setSearchValue] = useState('');
+
+  // FILTERS AND SORTING EXECUTION
   const filteredSets = collectionData
     .filter((set) =>
       `${set.first_name} ${set.last_name}`
@@ -179,10 +185,6 @@ export default function Patients() {
 
       return orderChoice === 'desc' ? -comparison : comparison;
     });
-
-    const closePopup = () => {
-      setSelectedPatient(null);
-  };
 
   return (
     <div className='view-appointments-page background'>

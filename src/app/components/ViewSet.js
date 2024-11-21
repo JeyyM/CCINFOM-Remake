@@ -1,5 +1,6 @@
 import React from 'react';
 
+// THE DISPLAY OF APPOINTMENT DETAILS
 const ViewSet = ({ set }) => {
   return (
     <div className="item-set">

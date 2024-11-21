@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import EmployeeUnit from './EmployeeUnit';
 
+// WHERE EMPLOYEES ARE SELECTED, NOT EDITED
 const SelectEmployee = ({ selectedEmployee, setSelectedEmployee, employeeList, onClose, handleSave, type }) => {
+    // HOLDS EMPLOYEE DATAS
+    const [collectionData, setCollectionData] = useState(employeeList);
+    //FOR TOGGLING MANAGED STAFF
+    const [newStaff, setNewStaff] = useState(selectedEmployee?.manager_of || []);
+
+    const toggleStaff = (id) => {
+        setNewStaff((prev) =>
+            prev.includes(id) ? prev.filter((staffId) => staffId !== id) : [...prev, id]
+        );
+    };
+
+    // SORTERS AND SEARHERS
     const [searchValue, setSearchValue] = useState('');
     const [orderChoice, setOrderChoice] = useState('desc');
     const [sortChoice, setSortChoice] = useState('id');
-
-    const [collectionData, setCollectionData] = useState(employeeList);
-    const [newStaff, setNewStaff] = useState(selectedEmployee?.manager_of || []);
 
     const handleSortChange = (e) => {
         setSortChoice(e.target.value);
@@ -45,13 +55,6 @@ const SelectEmployee = ({ selectedEmployee, setSelectedEmployee, employeeList, o
 
             return orderChoice === 'desc' ? -comparison : comparison;
         });
-
-
-    const toggleStaff = (id) => {
-        setNewStaff((prev) =>
-            prev.includes(id) ? prev.filter((staffId) => staffId !== id) : [...prev, id]
-        );
-    };
 
     return (
         <>

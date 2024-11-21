@@ -5,21 +5,12 @@ import Link from 'next/link';
 import ViewSet from '@/app/components/ViewSet';
 
 export default function Appointments() {
-  const [viewChoice, setViewChoice] = useState('scheduled');
-  const [sortChoice, setSortChoice] = useState('appointment_date');
-  const [orderChoice, setOrderChoice] = useState('desc');
-
-
-  const handleSortChange = (e) => {
-    setSortChoice(e.target.value);
-  };
-
-  const setCollectionData = [
+  const data = [
     {
       id: 1,
       date: "JAN 01, 2024 08:00 AM",
-      createdDate: "JAN 01, 2024 08:00 AM",
-      updatedDate: "JAN 01, 2024 08:00 AM",
+      creation_date: "JAN 01, 2024 08:00 AM",
+      updated_date: "JAN 01, 2024 08:00 AM",
       patient: {
         name: "Doe, John",
         email: "johndoe@gmail.com",
@@ -37,8 +28,8 @@ export default function Appointments() {
     {
       id: 2,
       date: "JAN 02, 2024 10:30 AM",
-      createdDate: "JAN 01, 2024 09:00 AM",
-      updatedDate: "JAN 02, 2024 09:30 AM",
+      creation_date: "JAN 01, 2024 09:00 AM",
+      updated_date: "JAN 02, 2024 09:30 AM",
       patient: {
         name: "Johnson, Emily",
         email: "emilyjohnson@gmail.com",
@@ -56,8 +47,8 @@ export default function Appointments() {
     {
       id: 3,
       date: "JAN 03, 2024 11:00 AM",
-      createdDate: "JAN 02, 2024 12:00 PM",
-      updatedDate: "JAN 03, 2024 10:00 AM",
+      creation_date: "JAN 02, 2024 12:00 PM",
+      updated_date: "JAN 03, 2024 10:00 AM",
       patient: {
         name: "Taylor, Samantha",
         email: "samanthataylor@gmail.com",
@@ -75,8 +66,8 @@ export default function Appointments() {
     {
       id: 4,
       date: "JAN 04, 2024 02:00 PM",
-      createdDate: "JAN 03, 2024 01:30 PM",
-      updatedDate: "JAN 04, 2024 01:00 PM",
+      creation_date: "JAN 03, 2024 01:30 PM",
+      updated_date: "JAN 04, 2024 01:00 PM",
       patient: {
         name: "Clark, Sarah",
         email: "sarahclark@gmail.com",
@@ -94,8 +85,8 @@ export default function Appointments() {
     {
       id: 5,
       date: "JAN 05, 2024 04:00 PM",
-      createdDate: "JAN 04, 2024 03:00 PM",
-      updatedDate: "JAN 05, 2024 03:30 PM",
+      creation_date: "JAN 04, 2024 03:00 PM",
+      updated_date: "JAN 05, 2024 03:30 PM",
       patient: {
         name: "Morris, Kevin",
         email: "kevinmorris@gmail.com",
@@ -112,7 +103,36 @@ export default function Appointments() {
     },
   ];
 
-  const filteredSets = setCollectionData.filter((set) => set.status === viewChoice);
+  // SORTING DETAILS
+  const [viewChoice, setViewChoice] = useState('scheduled');
+  const [sortChoice, setSortChoice] = useState('appointment_date');
+  const [orderChoice, setOrderChoice] = useState('desc');
+
+  const handleSortChange = (e) => {
+    setSortChoice(e.target.value);
+  };
+
+  const filteredSets = data
+  .filter((set) =>
+    set.status === viewChoice
+  )
+  .sort((a, b) => {
+    let comparison = 0;
+
+    if (sortChoice === 'appointment_date') {
+      comparison = new Date(a.date) - new Date(b.date);
+    } else if (sortChoice === 'creation_date') {
+      comparison = new Date(a.creation_date) - new Date(b.creation_date);
+    } else if (sortChoice === 'updated_date') {
+      comparison = new Date(a.updated_date) - new Date(b.updated_date);
+    } else if (sortChoice === 'total') {
+      comparison = a.payment.total - b.payment.total;
+    } else if (sortChoice === 'last_name') {
+      comparison = a.patient.name.localeCompare(b.patient.name);
+    }
+
+    return orderChoice === 'desc' ? -comparison : comparison;
+  });
 
   return (
     <div className='view-appointments-page background'>
@@ -147,7 +167,7 @@ export default function Appointments() {
               onChange={handleSortChange}
               className="dropdown-item-2 detail-text-dark">
               <option value="appointment_date">Schedule Date</option>
-              <option value="creation_date">Creation Date</option>
+              <option value="updated_date">Creation Date</option>
               <option value="total">Total Bill</option>
               <option value="last_name">Name</option>
             </select>
@@ -155,10 +175,10 @@ export default function Appointments() {
         </div>
 
         <div className="set-collection">
-        {filteredSets.map((set, index) => (
-          <ViewSet key={index} set={set} />
-        ))}
-      </div>
+          {filteredSets.map((set, index) => (
+            <ViewSet key={index} set={set} />
+          ))}
+        </div>
 
       </div>
     </div>

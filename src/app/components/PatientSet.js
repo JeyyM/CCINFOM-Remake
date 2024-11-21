@@ -1,6 +1,8 @@
 import React from 'react';
 
+// FOR DISPLAYING PATIENT DATA
 const PatientSet = ({ set, onEdit, type }) => {
+  // DATE FORMATTERS
   const months = [
     "JAN", "FEB", "MAR", "APR", "MAY", "JUN", 
     "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
@@ -14,7 +16,6 @@ const formatDate = (dateString) => {
 
   return `${month} ${day.toString()}, ${year}`;
 };
-
 
   return (
     <div className="item-set">

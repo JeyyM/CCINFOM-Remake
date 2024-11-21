@@ -1,7 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
 
+// FOR DISPLAYING EMPLOYEE DATA
 const EmployeeSet = ({ set, onEdit, onManage, type }) => {
+  // NOTE type WHICH IS FOR SPECIFYING DISPLAYS
+
+  // FOR THE DATES
   const months = [
     "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
     "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
@@ -36,8 +40,8 @@ const EmployeeSet = ({ set, onEdit, onManage, type }) => {
         <div className="set-column-1" style={{ width: "25%" }}>
           {set.status ? <button className='dark-button text-small-light-bold'>HIRED</button> : <button className='red-button text-small-white-bold'>FIRED</button>}
           {set.manager_of && set.manager_of.length > 0 > 0 ? <button className='neon-button-outline text-small-white-bold' style={{ padding: "1rem 0" }}
-          onClick={(e) => { onManage(e, set) }}>MANAGER</button> : <button className='neon-button-outline text-small-white-bold' style={{ padding: "1rem 0" }}
-          onClick={(e) => { onManage(e, set) }}>STAFF</button>}
+            onClick={(e) => { onManage(e, set) }}>MANAGER</button> : <button className='neon-button-outline text-small-white-bold' style={{ padding: "1rem 0" }}
+              onClick={(e) => { onManage(e, set) }}>STAFF</button>}
 
         </div>
 

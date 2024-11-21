@@ -34,7 +34,7 @@ export default function Employees() {
     }
     setSelectedEmployee(null);
   };
-  
+
   const data = [
     {
       id: 1,
@@ -206,86 +206,86 @@ export default function Employees() {
       monthly_salary: 50000,
       status: true,
     },
-  ];  
+  ];
 
   const [collectionData, setCollectionData] = useState(data);
 
   const filteredSets = collectionData
-  .filter((set) =>
-    `${set.first_name} ${set.last_name}`
-      .toLowerCase()
-      .includes(searchValue.toLowerCase())
-  )
-  .sort((a, b) => {
-    let comparison = 0;
+    .filter((set) =>
+      `${set.first_name} ${set.last_name}`
+        .toLowerCase()
+        .includes(searchValue.toLowerCase())
+    )
+    .sort((a, b) => {
+      let comparison = 0;
 
-    if (sortChoice === 'id') {
-      comparison = a.id - b.id;
-    } else if (sortChoice === 'last_name') {
-      comparison = a.last_name.localeCompare(b.last_name) || a.first_name.localeCompare(b.first_name);
-    } else if (sortChoice === 'hire_date') {
-      comparison = new Date(a.hire_date) - new Date(b.hire_date);
-    } else if (sortChoice === 'manager_count') {
-      comparison = (a.manager_of?.length || 0) - (b.manager_of?.length || 0);
-    } else if (sortChoice === 'birthday') {
-      comparison = new Date(a.birthday) - new Date(b.birthday);
-    } else if (sortChoice === 'job') {
-      comparison = a.job.localeCompare(b.job);
-    } else if (sortChoice === 'sex') {
-      comparison = a.sex.localeCompare(b.sex);
-    } else if (sortChoice === 'city') {
-      comparison = a.city.localeCompare(b.city);
-    } else if (sortChoice === 'salary') {
-      comparison = a.monthly_salary - b.monthly_salary;
-  }
+      if (sortChoice === 'id') {
+        comparison = a.id - b.id;
+      } else if (sortChoice === 'last_name') {
+        comparison = a.last_name.localeCompare(b.last_name) || a.first_name.localeCompare(b.first_name);
+      } else if (sortChoice === 'hire_date') {
+        comparison = new Date(a.hire_date) - new Date(b.hire_date);
+      } else if (sortChoice === 'manager_count') {
+        comparison = (a.manager_of?.length || 0) - (b.manager_of?.length || 0);
+      } else if (sortChoice === 'birthday') {
+        comparison = new Date(a.birthday) - new Date(b.birthday);
+      } else if (sortChoice === 'job') {
+        comparison = a.job.localeCompare(b.job);
+      } else if (sortChoice === 'sex') {
+        comparison = a.sex.localeCompare(b.sex);
+      } else if (sortChoice === 'city') {
+        comparison = a.city.localeCompare(b.city);
+      } else if (sortChoice === 'salary') {
+        comparison = a.monthly_salary - b.monthly_salary;
+      }
 
-    return orderChoice === 'desc' ? -comparison : comparison;
-  });
+      return orderChoice === 'desc' ? -comparison : comparison;
+    });
 
-    const assignManager = (data) => {
-      return data.map((employee) => {
-        const managerOf = data
-          .filter((emp) => emp.manager === employee.id).map((emp) => emp.id);
-    
-        return {
-          ...employee,
-          manager_of: managerOf,
-        };
-      });
-    };
-    
-    useEffect(() => {
-      const updatedData = assignManager(collectionData);
-      setCollectionData(updatedData);
-    }, [postUpdate]);
+  const assignManager = (data) => {
+    return data.map((employee) => {
+      const managerOf = data
+        .filter((emp) => emp.manager === employee.id).map((emp) => emp.id);
 
-    const [showManage, setShowManage] = useState(false);
+      return {
+        ...employee,
+        manager_of: managerOf,
+      };
+    });
+  };
 
-    const modifyManager = (employeeId, newStaff) => {
-      setCollectionData((prev) =>
-        prev.map((employee) => {
-          if (employee.id === employeeId) {
-            return {
-              ...employee,
-              manager_of: newStaff,
-            };
-          } else if (newStaff.includes(employee.id)) {
-            return {
-              ...employee,
-              manager: employeeId,
-            };
-          } else if (employee.manager === employeeId && !newStaff.includes(employee.id)) {
-            return {
-              ...employee,
-              manager: null,
-            };
-          }
-          return employee;
-        })
-      );
+  useEffect(() => {
+    const updatedData = assignManager(collectionData);
+    setCollectionData(updatedData);
+  }, [postUpdate]);
 
-      setPostUpdate(!postUpdate);
-    };
+  const [showManage, setShowManage] = useState(false);
+
+  const modifyManager = (employeeId, newStaff) => {
+    setCollectionData((prev) =>
+      prev.map((employee) => {
+        if (employee.id === employeeId) {
+          return {
+            ...employee,
+            manager_of: newStaff,
+          };
+        } else if (newStaff.includes(employee.id)) {
+          return {
+            ...employee,
+            manager: employeeId,
+          };
+        } else if (employee.manager === employeeId && !newStaff.includes(employee.id)) {
+          return {
+            ...employee,
+            manager: null,
+          };
+        }
+        return employee;
+      })
+    );
+
+    setPostUpdate(!postUpdate);
+  };
 
   return (
     <div className='view-appointments-page background'>
@@ -356,12 +356,12 @@ export default function Employees() {
         <div className="set-collection">
           {filteredSets.map((set, index) => (
             <EmployeeSet key={index} set={set} onEdit={() => {
-                setSelectedEmployee(set);
-                setEditing(true);
-              }} onManage={() => {
-                setSelectedEmployee(set)
-                setShowManage(true);
-                }} type="edit" />))}
+              setSelectedEmployee(set);
+              setEditing(true);
+            }} onManage={() => {
+              setSelectedEmployee(set)
+              setShowManage(true);
+            }} type="edit" />))}
         </div>
 
       </div>

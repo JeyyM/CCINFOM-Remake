@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import PatientSet from './PatientSet';
 
+// WHERE PATIENTS ARE SELECTED, NOT EDITED
 const SelectPatients = ({ patientList, onClose, handleSave }) => {
+    // PATIENT LIST
+    const [collectionData, setCollectionData] = useState(patientList);
+
+    // SEARCHERS AND SORTERS
     const [searchValue, setSearchValue] = useState('');
     const [orderChoice, setOrderChoice] = useState('desc');
     const [sortChoice, setSortChoice] = useState('id');
-
-    const [collectionData, setCollectionData] = useState(patientList);
 
     const handleSortChange = (e) => {
         setSortChoice(e.target.value);

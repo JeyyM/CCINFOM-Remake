@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
+// FOR INPUTTING/EDITING PATIENT DETAILS
 const PatientForm = ({ selectedPatient, setSelectedPatient, patientList, onClose, handleSave }) => {
     if (!selectedPatient) return null;
 
+    // HOLDS THE DETAILS IN DICTIONARY/OBJECTS
     const [formData, setFormData] = useState({ ...selectedPatient });
     const [errorState, setErrorState] = useState({});
-
-    useEffect(() => {
-        setFormData({ ...selectedPatient });
-        setErrorState({});
-    }, [selectedPatient]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -17,6 +14,13 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, patientList, onClose
         setErrorState((prev) => ({ ...prev, [name]: '' }));
     };
 
+    // SETS INITIAL DETAILS
+    useEffect(() => {
+        setFormData({ ...selectedPatient });
+        setErrorState({});
+    }, [selectedPatient]);
+
+    // TO HOLD ERRORS, UNSPECIFIC
     const validateForm = () => {
         const errors = {};
 
@@ -35,6 +39,7 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, patientList, onClose
         return Object.keys(errors).length === 0;
     };
 
+    // SENDS INPUT DATA
     const handleSubmit = (e) => {
         e.preventDefault();
 

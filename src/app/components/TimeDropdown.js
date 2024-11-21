@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
+// FOR HR, MIN, AM/PM INPUT
 export default function TimeDropdown({
+  // DATA BEING MODIFIED, COULD HAVE BEEN AN OBJECT BUT NOT GONNA FIX IT
   selectedHour,
   setSelectedHour,
   selectedMinute,
@@ -8,6 +10,8 @@ export default function TimeDropdown({
   selectedPeriod,
   setSelectedPeriod,
 }) {
+
+  // DATE CONVERSIONS
   const hours = Array.from({ length: 12 }, (hour, index) => String(index + 1).padStart(2, '0'));
 
   const minutes = Array.from({ length: 60 }, (min, index) => String(index + 1).padStart(2, '0'));

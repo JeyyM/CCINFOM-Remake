@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+// USED IN THE SAMPLE
 export default function ResultPopup({ selectedItem, tableName, primaryKey, onClose }) {
   if (!selectedItem) return null;
 

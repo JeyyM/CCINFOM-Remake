@@ -12,7 +12,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <NavBar/>
+        {/* Contains the NavBar, comment out to remove */}
+        <NavBar />
         {children}
       </body>
     </html>

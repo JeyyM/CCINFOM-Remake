@@ -41,7 +41,7 @@ export default function InputPage() {
     try {
       setError('');
       setSuccessMessage('');
-      
+
       const result = await fetchColumns(tableName);
 
       // to filter out auto_increment types so they don't get touched
