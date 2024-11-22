@@ -2,16 +2,6 @@ DROP DATABASE IF EXISTS medical_app;
 CREATE DATABASE medical_app;
 USE medical_app;
 
--- Create person_address table
-CREATE TABLE person_address (
-    address_id INT AUTO_INCREMENT PRIMARY KEY,
-    building_number VARCHAR(45) NOT NULL,
-    street_name VARCHAR(45) NOT NULL,
-    barangay_name VARCHAR(45),
-    city_name VARCHAR(45) NOT NULL,
-    province_name VARCHAR(45) NOT NULL
-);
-
 -- Create person table
 CREATE TABLE person (
     person_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -21,8 +11,9 @@ CREATE TABLE person (
     phone_number VARCHAR(45) UNIQUE NOT NULL,
     email VARCHAR(45) UNIQUE NOT NULL,
     sex ENUM('M', 'F') NOT NULL,
-    address_id INT,
-    FOREIGN KEY (address_id) REFERENCES person_address(address_id) ON DELETE SET NULL
+    street_name VARCHAR(45) NOT NULL,
+	city_name VARCHAR(45) NOT NULL,
+    province_name VARCHAR(45) NOT NULL
 );
 
 -- Create REF_job table
