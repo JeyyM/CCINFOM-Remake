@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-// FOR CREATING A NEW EMPLOYEE/EDITING EMPLOYEE DETAILS
-const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSave }) => {
-    // WHERE FORM DATA IS KEPT AS A DICTIONARY/OBJECT
-    const [formData, setFormData] = useState({
-        ...selectedEmployee,
-        // FOR CHANGING HIRED/FIRED
-        status: selectedEmployee.status !== null && selectedEmployee.status !== undefined ? selectedEmployee.status : true,
-    });
+// FOR INPUTTING/EDITING PATIENT DETAILS
+const PatientForm = ({ selectedPatient, setSelectedPatient, patientList, onClose, handleSave }) => {
+    if (!selectedPatient) return null;
+
+    // HOLDS THE DETAILS IN DICTIONARY/OBJECTS
+    const [formData, setFormData] = useState({ ...selectedPatient });
+    const [errorState, setErrorState] = useState({});
+    const [successMessage, setSuccessMessage] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -15,24 +15,13 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
         setErrorState((prev) => ({ ...prev, [name]: '' }));
     };
 
-    // TO CHANGE HIRED/FIRED
-    const toggleStatus = () => {
-        setFormData((prev) => ({ ...prev, status: !prev.status }));
-    };
-
-    // FOR STATUSLESS/NEW EMPLOYEES
+    // SETS INITIAL DETAILS
     useEffect(() => {
-        setFormData({
-            ...selectedEmployee,
-            status: selectedEmployee.status !== null && selectedEmployee.status !== undefined ? selectedEmployee.status : true
-        });
+        setFormData({ ...selectedPatient });
         setErrorState({});
-    }, [selectedEmployee]);
+    }, [selectedPatient]);
 
-    // TO HOLD THE ERRORS
-    const [errorState, setErrorState] = useState({});
-
-    // FOR ERROR CHECKING, IS INCOMPLETE/UNSPECIFIC
+    // TO HOLD ERRORS, UNSPECIFIC
     const validateForm = () => {
         const errors = {};
 
@@ -45,18 +34,17 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
         if (!formData.street) errors.street = 'Street is required.';
         if (!formData.city) errors.city = 'City is required.';
         if (!formData.province) errors.province = 'Province is required.';
-        if (!formData.hire_date) errors.hire_date = 'Hire date is required.';
-        if (!formData.job) errors.job = 'Job is required.';
-        if (!formData.monthly_salary) errors.monthly_salary = 'Monthly salary is required.';
 
         setErrorState(errors);
 
         return Object.keys(errors).length === 0;
     };
-    const handleSaveEmployee = async () => {
+
+    const handleSavePatient = async () => {
         const destination = "person";
         setErrorState('');
 
+        // Filling out person table
         const inputData = {
             first_name: formData.first_name,
             last_name: formData.last_name,
@@ -65,6 +53,7 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
             email: formData.email,
             sex: formData.sex,
         };
+
         try {
             //Submit data to the database
           const res = await fetch('/api/getData?type=add', {
@@ -75,24 +64,29 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
           //checks if submit was successful
           const response = await res.json();
           if (res.ok) {
-            setSuccessMessage2(response.message);
+            setSuccessMessage(response.message);
             onClose();
           } else {
             setErrorState(response.error);
+            onClose();
           }
         } catch (err) {
           setErrorState('Failed to insert data');
+          onClose();
         }
-        // Filling out the ref_job table
+
+        // Filling out the person_address table
         const inputData2 = {
-            job_name: formData.job,
+            street_name: formData.street,
+            city_name: formData.city,
+            province_name: formData.province,
         };
         try {
             //Submit data to the database
           const res = await fetch('/api/getData?type=add', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tableName: "REF_job", formData: inputData2 })
+            body: JSON.stringify({ tableName: "person_address", formData: inputData2 })
           });
           //checks if submit was successful
           const response = await res.json();
@@ -105,25 +99,31 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
         } catch (err) {
           setErrorState('Failed to insert data');
         }
+        //TODO have to query in order to put in patient table
+
+        
     };
-    // SENDS FORM DATA TO THE ORIGINAL PAGE
-    const handleSubmit = (e) => {
+
+
+    // SENDS INPUT DATA
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setSuccessMessage('');
 
         if (validateForm()) {
-            handleSaveEmployee(formData);
+            await handleSavePatient(formData); // Call the updated handleSave function
             onClose();
         }
     };
+    
 
     return (
         <>
             <div className="popup-whitesheet" onClick={onClose}></div>
-            <div className="employee-form">
+            <div className="patient-form">
                 <form className="pop-up-form" onSubmit={handleSubmit}>
-                    <h2 className="text-large-white-bold">EMPLOYEE FORM</h2>
-
-                    <div className="form-row">
+                    <h2 className='text-large-white-bold'>PATIENT FORM</h2>
+                    <div className='form-row'>
                         <div className="form-group">
                             <label className="text-medium-white-bold">First Name</label>
                             <input
@@ -135,6 +135,7 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
                             />
                             {errorState.first_name && <span className="warning-text">{errorState.first_name}</span>}
                         </div>
+
                         <div className="form-group">
                             <label className="text-medium-white-bold">Last Name</label>
                             <input
@@ -146,6 +147,7 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
                             />
                             {errorState.last_name && <span className="warning-text">{errorState.last_name}</span>}
                         </div>
+
                         <div className="form-group">
                             <label className="text-medium-white-bold">Birthday</label>
                             <input
@@ -157,6 +159,7 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
                             />
                             {errorState.birthday && <span className="warning-text">{errorState.birthday}</span>}
                         </div>
+
                     </div>
 
                     <div className='form-row'>
@@ -229,6 +232,9 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
                             />
                             {errorState.city && <span className="warning-text">{errorState.city}</span>}
                         </div>
+                    </div>
+
+                    <div className='form-row'>
                         <div className="form-group">
                             <label className="text-medium-white-bold">Province</label>
                             <input
@@ -241,59 +247,11 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
                             />
                             {errorState.province && <span className="warning-text">{errorState.province}</span>}
                         </div>
-                    </div>
 
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label className="text-medium-white-bold">Hire Date</label>
-                            <input
-                                type="date"
-                                name="hire_date"
-                                value={formData.hire_date || ''}
-                                onChange={handleChange}
-                                className="form-input detail-text-dark"
-                            />
-                            {errorState.hire_date && <span className="warning-text">{errorState.hire_date}</span>}
-                        </div>
-                        <div className="form-group">
-                            <label className="text-medium-white-bold">Job</label>
-                            <input
-                                type="text"
-                                name="job"
-                                value={formData.job || ''}
-                                onChange={handleChange}
-                                placeholder="Job"
-                                className="form-input detail-text-dark"
-                            />
-                            {errorState.job && <span className="warning-text">{errorState.job}</span>}
-                        </div>
-                        <div className="form-group">
-                            <label className="text-medium-white-bold">Monthly Salary</label>
-                            <input
-                                type="number"
-                                name="monthly_salary"
-                                value={formData.monthly_salary || ''}
-                                onChange={handleChange}
-                                placeholder="Monthly Salary"
-                                className="form-input detail-text-dark"
-                            />
-                            {errorState.monthly_salary && <span className="warning-text">{errorState.monthly_salary}</span>}
-                        </div>
-                    </div>
-
-                    <div className="form-row">
-                        {selectedEmployee.status !== null && selectedEmployee.status !== undefined && (formData.status ? <button type="button" className="large-button-dark detail-text-light" onClick={toggleStatus}>
-                            HIRED
-                        </button> :
-                            <button type="button" className="large-button-red detail-text-white" onClick={toggleStatus}>
-                                FIRED
-                            </button>)}
-                        <button type="button" className="large-button-outline detail-text-white" onClick={onClose}>
+                        <button type="button" className='large-button-outline detail-text-white' onClick={() => setSelectedPatient(null)}>
                             Cancel
                         </button>
-                        <button type="submit" className="large-button-neon detail-text-dark">
-                            Save
-                        </button>
+                        <button type="submit" className='large-button-neon detail-text-dark'>Save</button>
                     </div>
                 </form>
             </div>
@@ -301,4 +259,4 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
     );
 };
 
-export default EmployeeForm;
+export default PatientForm;

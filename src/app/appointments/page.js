@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import TimeDropdown from '../components/TimeDropdown';
-import PatientForm from '../components/PatientForm';
-import SelectPatients from '../components/SelectPatients';
-import SelectEmployee from '../components/SelectEmployee';
+import TimeDropdown from '../../components/TimeDropdown';
+import PatientForm from '../../components/PatientForm';
+import SelectPatients from '../../components/SelectPatients';
+import SelectEmployee from '../../components/SelectEmployee';
 
 export default function Appointments() {
   // PRESET DATA

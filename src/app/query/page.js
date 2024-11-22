@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import ResultPopup from '../components/ResultPopup';
+import ResultPopup from '../../components/ResultPopup';
 
 export default function Query() {
     // FORM STATES

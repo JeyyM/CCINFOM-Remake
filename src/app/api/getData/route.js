@@ -1,4 +1,4 @@
-import db from '../../../lib/db';
+import db from '@/libs/db';
 
 export async function GET(req) {
   // the paremeters given like a link url
@@ -136,7 +136,7 @@ export async function POST(req) {
       return new Response(JSON.stringify({ success: true, message: 'Data inserted successfully' }), { status: 200 });
     } catch (error) {
       console.error('Database insertion error:', error);
-      return new Response(JSON.stringify({ error: error.message }), { status: 300 });
+      return new Response(JSON.stringify({ error: error.message }), { status: 400 });
     }
     // MAKE A TABLE
   }else if (type === "create") {
