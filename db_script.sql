@@ -80,7 +80,9 @@ CREATE TABLE bill (
 -- Create REF_test_type table
 CREATE TABLE REF_test_type (
     test_id INT AUTO_INCREMENT PRIMARY KEY,
-    test_name VARCHAR(45) NOT NULL UNIQUE
+    test_name VARCHAR(45) NOT NULL UNIQUE,
+    test_price DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT valid_price CHECK (test_price >= 0)
 );
 
 -- Create appointment_result table
