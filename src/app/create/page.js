@@ -109,6 +109,10 @@ export default function InputPage() {
               onChange={(e) => handleFieldChange(index, 'dataType', e.target.value)}
             >
               <option value="Varchar(50)">Varchar(50)</option>
+              <option value="Text">Text</option>
+              <option value="Enum('M','F')">Enum('M','F')</option>
+              <option value="Decimal(10,2)">Decimal(10,2)</option>
+              <option value="Boolean">Boolean</option>
               <option value="Datetime">Datetime</option>
               <option value="Int">Int</option>
             </select>
