@@ -113,12 +113,12 @@ export async function POST(req) {
 
   // CHECK TABLE NAME
   if (!tableName || !validateTableName(tableName)) {
-    return new Response(JSON.stringify({ error: 'Invalid table name' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'Invalid table name' }), { status: 402 });
   }
 
   // NON-EMPTY
   if (!formData || Object.keys(formData).length === 0) {
-    return new Response(JSON.stringify({ error: 'Invalid data' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'Invalid data' }), { status: 401 });
   }
 
   console.log(tableName, formData)
@@ -136,40 +136,7 @@ export async function POST(req) {
       return new Response(JSON.stringify({ success: true, message: 'Data inserted successfully' }), { status: 200 });
     } catch (error) {
       console.error('Database insertion error:', error);
-      return new Response(JSON.stringify({ error: error.message }), { status: 400 });
-    }
-    //Vienn
-  } else if (type === "addPatient") {
-    try {
-      const columns = Object.keys(formData).map((col) => `\`${col}\``).join(', ');
-      const values = Object.values(formData);
-      const placeholders = values.map(() => '?').join(', ');
-
-      const query = `INSERT INTO \`${tableName}\` (${columns}) VALUES (${placeholders})`;
-      // TODO: Make the address go to person_address and then fetch the address_id then insert into person
-      // TODO: Add to patient table
-      await db.query(query, values);
-
-      return new Response(JSON.stringify({ success: true, message: 'Data inserted successfully' }), { status: 200 });
-    } catch (error) {
-      console.error('Database insertion error:', error);
-      return new Response(JSON.stringify({ error: error.message }), { status: 400 });
-    }
-    //Vienn
-  } else if (type === "addEmployee") {
-    try {
-      const columns = Object.keys(formData).map((col) => `\`${col}\``).join(', ');
-      const values = Object.values(formData);
-      const placeholders = values.map(() => '?').join(', ');
-
-      const query = `INSERT INTO \`${tableName}\` (${columns}) VALUES (${placeholders})`;
-      await db.query(query, values);
-      //TODO Put into staff table
-      // TODO Figureout the person address again
-      return new Response(JSON.stringify({ success: true, message: 'Data inserted successfully' }), { status: 200 });
-    } catch (error) {
-      console.error('Database insertion error:', error);
-      return new Response(JSON.stringify({ error: error.message }), { status: 400 });
+      return new Response(JSON.stringify({ error: error.message }), { status: 300 });
     }
     // MAKE A TABLE
   }else if (type === "create") {
@@ -192,7 +159,7 @@ export async function POST(req) {
     }
   }  
 
-  return new Response(JSON.stringify({ error: error.message }), { status: 400 });
+  return new Response(JSON.stringify({ error: error.message }), { status: 432 });
 }
 
 // TO EDIT AN ENTRY
