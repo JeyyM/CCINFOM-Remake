@@ -30,12 +30,12 @@ export default function InputPage() {
       }
       return res.json();
     } catch (err) {
-      console.error('Fetch error:', err);
+      // console.error('Fetch error:', err);
       setError('Failed to fetch columns');
       return [];
     }
   }
-
+  
 
   const handleFetch = async () => {
     try {
@@ -62,7 +62,7 @@ export default function InputPage() {
     setSuccessMessage('');
 
     try {
-      const res = await fetch('/api/getData', {
+      const res = await fetch('/api/getData?type=add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tableName, formData })
