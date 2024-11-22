@@ -18,7 +18,7 @@ export async function GET(req) {
   const databaseName = process.env.DB_NAME;
 
   // no table given
-  if (!tableName) {
+  if (!tableName && type !== "tables") {
     return new Response(JSON.stringify({ error: 'Table name is required' }), { status: 400 });
   }
 
@@ -80,7 +80,21 @@ export async function GET(req) {
       // console.error('Error fetching primary key:', error);
       return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }
+  } else if (type === 'tables') {
+    const query = `
+      SELECT TABLE_NAME 
+      FROM INFORMATION_SCHEMA.TABLES 
+      WHERE TABLE_SCHEMA = ?
+    `;
+    try {
+      const [rows] = await db.query(query, [databaseName]);
+      const tableNames = rows.map(row => row.TABLE_NAME);
+      return new Response(JSON.stringify(tableNames), { status: 200 });
+    } catch (error) {
+      return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    }
   }
+
 }
 
 
@@ -106,6 +120,8 @@ export async function POST(req) {
   if (!formData || Object.keys(formData).length === 0) {
     return new Response(JSON.stringify({ error: 'Invalid data' }), { status: 400 });
   }
+
+  console.log(tableName, formData)
 
   // INSERTING DATA
   if (type === "add") {
@@ -144,7 +160,7 @@ export async function POST(req) {
     }
   }  
 
-  return new Response(JSON.stringify({ error: 'Invalid request type' }), { status: 400 });
+  return new Response(JSON.stringify({ error: error.message }), { status: 400 });
 }
 
 // TO EDIT AN ENTRY

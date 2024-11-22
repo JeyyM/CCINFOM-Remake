@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         {/* Contains the NavBar, comment out to remove */}
-        {/* <NavBar /> */}
+        <NavBar />
         {children}
       </body>
     </html>

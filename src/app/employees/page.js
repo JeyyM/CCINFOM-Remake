@@ -348,7 +348,7 @@ export default function Employees() {
               </select>
             </div>
 
-            <button className='medium-button-1 ' onClick={() => {setSelectedEmployee({}); setEditing(!editing)}}>ADD EMPLOYEE</button>
+            <button className='medium-button-1 detail-text-dark' onClick={() => {setSelectedEmployee({}); setEditing(!editing)}}>ADD EMPLOYEE</button>
 
           </div>
         </div>
