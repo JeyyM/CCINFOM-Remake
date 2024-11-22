@@ -131,16 +131,48 @@ export async function POST(req) {
       const placeholders = values.map(() => '?').join(', ');
 
       const query = `INSERT INTO \`${tableName}\` (${columns}) VALUES (${placeholders})`;
-
       await db.query(query, values);
 
       return new Response(JSON.stringify({ success: true, message: 'Data inserted successfully' }), { status: 200 });
     } catch (error) {
-      // console.error('Database insertion error:', error);
-      return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+      console.error('Database insertion error:', error);
+      return new Response(JSON.stringify({ error: error.message }), { status: 400 });
+    }
+    //Vienn
+  } else if (type === "addPatient") {
+    try {
+      const columns = Object.keys(formData).map((col) => `\`${col}\``).join(', ');
+      const values = Object.values(formData);
+      const placeholders = values.map(() => '?').join(', ');
+
+      const query = `INSERT INTO \`${tableName}\` (${columns}) VALUES (${placeholders})`;
+      // TODO: Make the address go to person_address and then fetch the address_id then insert into person
+      // TODO: Add to patient table
+      await db.query(query, values);
+
+      return new Response(JSON.stringify({ success: true, message: 'Data inserted successfully' }), { status: 200 });
+    } catch (error) {
+      console.error('Database insertion error:', error);
+      return new Response(JSON.stringify({ error: error.message }), { status: 400 });
+    }
+    //Vienn
+  } else if (type === "addEmployee") {
+    try {
+      const columns = Object.keys(formData).map((col) => `\`${col}\``).join(', ');
+      const values = Object.values(formData);
+      const placeholders = values.map(() => '?').join(', ');
+
+      const query = `INSERT INTO \`${tableName}\` (${columns}) VALUES (${placeholders})`;
+      await db.query(query, values);
+      //TODO Put into staff table
+      // TODO Figureout the person address again
+      return new Response(JSON.stringify({ success: true, message: 'Data inserted successfully' }), { status: 200 });
+    } catch (error) {
+      console.error('Database insertion error:', error);
+      return new Response(JSON.stringify({ error: error.message }), { status: 400 });
     }
     // MAKE A TABLE
-  } else if (type === "create") {
+  }else if (type === "create") {
     try {
       const fieldDefinitions = formData.map((field) => {
         const nullable = field.nullable ? '' : 'NOT NULL';

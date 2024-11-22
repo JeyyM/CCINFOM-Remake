@@ -53,13 +53,44 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
 
         return Object.keys(errors).length === 0;
     };
+    const handleSaveEmployee = async () => {
+        const destination = "person";
+        setErrorState('');
 
+        const inputData = {
+            first_name: formData.first_name,
+            last_name: formData.last_name,
+            date_of_birth: formData.birthday,
+            phone_number: formData.phone,
+            email: formData.email,
+            sex: formData.sex,
+        };
+        try {
+            //Submit data to the database
+          const res = await fetch('/api/getData?type=addEmployee', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tableName: destination, formData: inputData })
+          });
+          //checks if submit was successful
+          const response = await res.json();
+          if (res.ok) {
+            setSuccessMessage2(response.message);
+            onClose();
+          } else {
+            setErrorState(response.error);
+          }
+        } catch (err) {
+          setErrorState('Failed to insert data');
+        }
+
+    };
     // SENDS FORM DATA TO THE ORIGINAL PAGE
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if (validateForm()) {
-            handleSave(formData);
+            handleSaveEmployee(formData);
             onClose();
         }
     };
