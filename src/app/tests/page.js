@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import TestForm from '@/app/components/TestForm';
+import TestForm from '@/components/TestForm';
 
 // FOR ADDING NEW TESTS
 export default function Employees() {

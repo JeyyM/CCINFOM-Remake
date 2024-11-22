@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import ViewSet from '@/app/components/ViewSet';
+import ViewSet from '@/components/ViewSet';
 
 export default function Appointments() {
   const data = [
