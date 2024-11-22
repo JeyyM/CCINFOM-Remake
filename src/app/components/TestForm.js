@@ -75,8 +75,7 @@ const TestForm = ({ onClose }) => {
 
         const inputData = {
             test_name: tableName,
-            // uncomment on creation of test_price
-            // test_price: testPrice
+            test_price: testPrice
         };
     
         try {

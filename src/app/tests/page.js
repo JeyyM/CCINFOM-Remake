@@ -67,6 +67,7 @@ export default function Employees() {
     fetchTables();
   }, [adding]);
 
+  console.log(tables);
 
   return (
     <div className='view-appointments-page background'>
