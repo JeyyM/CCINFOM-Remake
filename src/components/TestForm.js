@@ -12,7 +12,7 @@ const TestForm = ({ onClose }) => {
     // State to manage the form fields
     const [formData, setFormData] = useState([
         { name: 'ID', nullable: false, dataType: 'INT', isPrimaryKey: true, autoIncrement: true }, // Default primary key field
-        { name: 'appointment_id', nullable: false, dataType: 'INT', isPrimaryKey: true, autoIncrement: true }, // Appointment id field
+        { name: 'appointment_id', nullable: false, dataType: 'INT', isPrimaryKey: false, autoIncrement: false }, // Appointment id field
         { name: '', nullable: true, dataType: 'VARCHAR(45)', isPrimaryKey: false, autoIncrement: false },
     ]);
 
