@@ -14,11 +14,11 @@ export default function Add() {
     //   setSquareColor('red');
     // }
 
-    squareColor == "red" ? setSquareColor("blue") : setSquareColor("red")
+    squareColor === "red" ? setSquareColor("blue") : setSquareColor("red")
   }
 
   useEffect(() => {
-    squareColor == "red" ? setEffectText("beep") : setEffectText("boop")
+    squareColor === "red" ? setEffectText("beep") : setEffectText("boop")
   }, [squareColor]);
 
   const [time, setTime] = useState(new Date());

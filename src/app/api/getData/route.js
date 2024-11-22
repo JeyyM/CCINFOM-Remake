@@ -113,12 +113,12 @@ export async function POST(req) {
 
   // CHECK TABLE NAME
   if (!tableName || !validateTableName(tableName)) {
-    return new Response(JSON.stringify({ error: 'Invalid table name' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'Invalid table name' }), { status: 402 });
   }
 
   // NON-EMPTY
   if (!formData || Object.keys(formData).length === 0) {
-    return new Response(JSON.stringify({ error: 'Invalid data' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'Invalid data' }), { status: 401 });
   }
 
   console.log(tableName, formData)
@@ -131,16 +131,15 @@ export async function POST(req) {
       const placeholders = values.map(() => '?').join(', ');
 
       const query = `INSERT INTO \`${tableName}\` (${columns}) VALUES (${placeholders})`;
-
       await db.query(query, values);
 
       return new Response(JSON.stringify({ success: true, message: 'Data inserted successfully' }), { status: 200 });
     } catch (error) {
-      // console.error('Database insertion error:', error);
-      return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+      console.error('Database insertion error:', error);
+      return new Response(JSON.stringify({ error: error.message }), { status: 300 });
     }
     // MAKE A TABLE
-  } else if (type === "create") {
+  }else if (type === "create") {
     try {
       const fieldDefinitions = formData.map((field) => {
         const nullable = field.nullable ? '' : 'NOT NULL';
@@ -160,7 +159,7 @@ export async function POST(req) {
     }
   }  
 
-  return new Response(JSON.stringify({ error: error.message }), { status: 400 });
+  return new Response(JSON.stringify({ error: error.message }), { status: 432 });
 }
 
 // TO EDIT AN ENTRY

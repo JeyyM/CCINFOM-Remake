@@ -7,6 +7,7 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, patientList, onClose
     // HOLDS THE DETAILS IN DICTIONARY/OBJECTS
     const [formData, setFormData] = useState({ ...selectedPatient });
     const [errorState, setErrorState] = useState({});
+    const [successMessage, setSuccessMessage] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -39,15 +40,80 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, patientList, onClose
         return Object.keys(errors).length === 0;
     };
 
+    const handleSavePatient = async () => {
+        const destination = "person";
+        setErrorState('');
+
+        // Filling out person table
+        const inputData = {
+            first_name: formData.first_name,
+            last_name: formData.last_name,
+            date_of_birth: formData.birthday,
+            phone_number: formData.phone,
+            email: formData.email,
+            sex: formData.sex,
+        };
+
+        try {
+            //Submit data to the database
+          const res = await fetch('/api/getData?type=add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tableName: destination, formData: inputData })
+          });
+          //checks if submit was successful
+          const response = await res.json();
+          if (res.ok) {
+            setSuccessMessage(response.message);
+            onClose();
+          } else {
+            setErrorState(response.error);
+            onClose();
+          }
+        } catch (err) {
+          setErrorState('Failed to insert data');
+          onClose();
+        }
+
+        // Filling out the person_address table
+        const inputData2 = {
+            street_name: formData.street,
+            city_name: formData.city,
+            province_name: formData.province,
+        };
+        try {
+            //Submit data to the database
+          const res = await fetch('/api/getData?type=add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tableName: "person_address", formData: inputData2 })
+          });
+          //checks if submit was successful
+          const response = await res.json();
+          if (res.ok) {
+            setSuccessMessage(response.message);
+
+          } else {
+            setErrorState(response.error);
+          }
+        } catch (err) {
+          setErrorState('Failed to insert data');
+        }
+
+        
+    };
+
     // SENDS INPUT DATA
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setSuccessMessage('');
 
         if (validateForm()) {
-            handleSave(formData);
+            await handleSavePatient(formData); // Call the updated handleSave function
             onClose();
         }
     };
+    
 
     return (
         <>
