@@ -99,7 +99,50 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
             setErrorState('Failed to insert data');
         }
 
-        // Additional saving logic...
+        try {
+        
+            //Submit data to the database
+            const res = await fetch('/api/getData?type=add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tableName: destination, formData: inputData })
+            });
+
+            //checks if submit was successful
+            const response = await res.json();
+            if (res.ok) {
+                setSuccessMessage2(response.message);
+                onClose();
+            } else {
+                setErrorState(response.error);
+            }
+        } catch (err) {
+          setErrorState('Failed to insert data');
+        }
+        // Filling out the ref_job table
+        const inputData2 = {
+            job_name: formData.job,
+        };
+        try {
+            //Submit data to the database
+            const res = await fetch('/api/getData?type=add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tableName: "REF_job", formData: inputData2 })
+            });
+            //checks if submit was successful
+            const response = await res.json();
+            if (res.ok) {
+                setSuccessMessage(response.message);
+
+            } else {
+                setErrorState(response.error);
+            }
+        } catch (err) {
+            setErrorState('Failed to insert data');
+        }
+
+        // TODO Additional saving logic...
     };
 
     const handleSubmit = (e) => {
