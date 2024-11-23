@@ -234,7 +234,7 @@ export default function Records() {
             />
           </div>
 
-          <div className='line-graph'>
+          <div className='pie-graph'>
             <PieChart
               labels={["Cupcake", "slop", "Cookies", "Fruits", "Drinks"]}
               data={[25, 40, 15, 10, 10]}
@@ -249,6 +249,7 @@ export default function Records() {
               chart_label="Fav Food"
             ></BarChart>
           </div>
+          
 
 
 
