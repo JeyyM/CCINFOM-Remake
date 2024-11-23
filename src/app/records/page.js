@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import LineGraph from '@/components/LineGraph';
 import PieChart from '@/components/PieGraph';
 import BarChart from '@/components/BarGraph';
-import MultiLineGraph from '@/components/MultiLineGraph';
 
 /**
  * Records Component
@@ -47,9 +46,9 @@ export default function Records() {
     const fetchRevenueTrends = async () => {
         const tableName = "appointment";
         const joins = JSON.stringify([{ table: "bill", on: "appointment.appointment_id = bill.appointment_id", type: "JOIN" }]);
-        const columns = "DATE_FORMAT(appointment_date, '%Y-%m-%d') AS day, appointment.status AS status, SUM(total_paid) AS total_revenue";
-        const groupBy = "day, status";
-        const orderBy = "day, status";
+        const columns = "DATE_FORMAT(appointment_date, '%Y-%m-%d') AS day, FLOOR(SUM(total_paid)) AS total_revenue";
+        const groupBy = "day";
+        const orderBy = "day";
 
         try {
             const response = await fetch(
@@ -189,31 +188,14 @@ export default function Records() {
                         />
                     </div>
 
-                    {/* Multi-Line Graph - Revenue Trends by Status */}
+                    {/* Line Graph - Revenue Trends Over Time */}
                     <div className="line-graph">
-                        <MultiLineGraph
-                            xaxis={[...new Set(revenueTrends.map((item) => item.day))]}
-                            datasets={[
-                                {
-                                    label: 'Scheduled',
-                                    data: revenueTrends
-                                        .filter((item) => item.status === 'Scheduled')
-                                        .map((item) => item.total_revenue),
-                                },
-                                {
-                                    label: 'Completed',
-                                    data: revenueTrends
-                                        .filter((item) => item.status === 'Completed')
-                                        .map((item) => item.total_revenue),
-                                },
-                                {
-                                    label: 'Cancelled',
-                                    data: revenueTrends
-                                        .filter((item) => item.status === 'Cancelled')
-                                        .map((item) => item.total_revenue),
-                                },
-                            ]}
-                            chart_label="Revenue Trends by Status"
+                        <LineGraph
+                            xaxis={revenueTrends.map((item) => item.day)}
+                            yaxis={revenueTrends.map((item) => item.total_revenue)}
+                            chart_label="Revenue Trends Over Time"
+                            xscale="time"
+                            yscale="revenue"
                         />
                     </div>
 
