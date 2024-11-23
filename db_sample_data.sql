@@ -60,16 +60,17 @@ VALUES
 -- (8, 'Physician Assistant', 'Supports physicians with procedures', 40000.00, 85000.00);
 
 -- Populating the staff table
-INSERT INTO staff (person_id, monthly_salary, status, job)
+INSERT INTO staff (person_id, job_name, monthly_salary, status)
 VALUES
-(1, 50000.00, 'ACTIVE', 'Doctor'),
-(3, 60000.00, 'ACTIVE', 'Nurse'),
-(4, 55000.00, 'ACTIVE', 'Lab Technician'),
-(6, 48000.00, 'ACTIVE', 'Pharmacist'),
-(9, 53000.00, 'ACTIVE', 'Radiologist'),
-(12, 42000.00, 'ACTIVE', 'Therapist'),
-(15, 47000.00, 'INACTIVE', 'Physician Assistant'),
-(16, 51000.00, 'ACTIVE', 'Admin Staff');
+(1, 'Doctor', 50000.00, 'Hired'),
+(3, 'Nurse', 60000.00, 'Hired'),
+(4, 'Lab Technician', 55000.00, 'Hired'),
+(6, 'Pharmacist', 48000.00, 'Hired'),
+(9, 'Radiologist', 53000.00, 'Hired'),
+(12, 'Therapist', 42000.00, 'Hired'),
+(15, 'Physician Assistant', 47000.00, 'Fired'),
+(16, 'Admin Staff', 51000.00, 'Hired');
+
 
 -- Populating the patient table
 INSERT INTO patient (person_id)
@@ -88,44 +89,45 @@ VALUES
 (20);
 
 -- Populating the appointment table
-INSERT INTO appointment (patient_id, staff_id, appointment_date, status, created_at, updated_at)
+INSERT INTO appointment (appointment_id, patient_id, staff_id, appointment_date, status, created_at, updated_at)
 VALUES
-(2, 1, '2024-01-20 10:30:00', 'Scheduled', NOW(), NOW()),
-(5, 6, '2024-01-21 14:00:00', 'Completed', NOW(), NOW()),
-(7, 4, '2024-01-22 09:00:00', 'Scheduled', NOW(), NOW()),
-(8, 12, '2024-01-23 16:00:00', 'Cancelled', NOW(), NOW()),
-(10, 1, '2024-01-24 11:00:00', 'Scheduled', NOW(), NOW()),
-(11, 3, '2024-02-01 09:00:00', 'Scheduled', NOW(), NOW()),
-(5, 4, '2024-02-02 11:30:00', 'Completed', NOW(), NOW()),
-(13, 6, '2024-02-03 14:15:00', 'Scheduled', NOW(), NOW()),
-(14, 9, '2024-02-04 10:00:00', 'Cancelled', NOW(), NOW()),
-(5, 3, '2024-02-05 13:45:00', 'Scheduled', NOW(), NOW()),
-(10, 12, '2024-02-06 16:00:00', 'Completed', NOW(), NOW()),
-(17, 16, '2024-02-07 15:30:00', 'Completed', NOW(), NOW()),
-(18, 3, '2024-02-08 12:00:00', 'Scheduled', NOW(), NOW()),
-(11, 1, '2024-02-09 09:30:00', 'Scheduled', NOW(), NOW()),
-(20, 6, '2024-02-10 08:15:00', 'Scheduled', NOW(), NOW());
+(1, 2, 1, '2024-01-20 10:30:00', 'Scheduled', NOW(), NOW()),
+(2, 5, 6, '2024-01-21 14:00:00', 'Completed', NOW(), NOW()),
+(3, 7, 4, '2024-01-22 09:00:00', 'Scheduled', NOW(), NOW()),
+(4, 8, 12, '2024-01-23 16:00:00', 'Cancelled', NOW(), NOW()),
+(5, 10, 1, '2024-01-24 11:00:00', 'Scheduled', NOW(), NOW()),
+(6, 11, 3, '2024-02-01 09:00:00', 'Scheduled', NOW(), NOW()),
+(7, 5, 4, '2024-02-02 11:30:00', 'Completed', NOW(), NOW()),
+(8, 13, 6, '2024-02-03 14:15:00', 'Scheduled', NOW(), NOW()),
+(9, 14, 9, '2024-02-04 10:00:00', 'Cancelled', NOW(), NOW()),
+(10, 5, 3, '2024-02-05 13:45:00', 'Scheduled', NOW(), NOW()),
+(11, 10, 12, '2024-02-06 16:00:00', 'Completed', NOW(), NOW()),
+(12, 17, 16, '2024-02-07 15:30:00', 'Completed', NOW(), NOW()),
+(13, 18, 3, '2024-02-08 12:00:00', 'Scheduled', NOW(), NOW()),
+(14, 11, 1, '2024-02-09 09:30:00', 'Scheduled', NOW(), NOW()),
+(15, 20, 6, '2024-02-10 08:15:00', 'Scheduled', NOW(), NOW());
  
 -- Populating the REF_test_type table
--- INSERT INTO REF_test_type (test_id, test_name, test_price)
--- VALUES
--- (1, 'Blood Test', 1500.00),
--- (2, 'Urine Test', 2000.00),
--- (3, 'X-Ray', 1200),
--- (4, 'MRI', 1800.00),
--- (5, 'CT Scan', 2200.00),
--- (6, 'EKG', 2500.00),
--- (7, 'Lipid Profile', 3000.00);
-
-INSERT INTO test_junction (test_id, test_name, test_price)
+INSERT INTO REF_test_type (test_name, test_price)
 VALUES
-(1, 'Blood Test', 1500.00),
-(2, 'Urine Test', 2000.00),
-(3, 'X-Ray', 1200),
-(4, 'MRI', 1800.00),
-(5, 'CT Scan', 2200.00),
-(6, 'EKG', 2500.00),
-(7, 'Lipid Profile', 3000.00);
+('Blood Test', 1500.00),
+('Urine Test', 2000.00),
+('X-Ray', 1200),
+('MRI', 1800.00),
+('CT Scan', 2200.00),
+('EKG', 2500.00),
+('Lipid Profile', 3000.00);
+
+INSERT INTO junction_table (appointment_id, test_name)
+VALUES
+(1, 'Blood Test'),
+(2, 'Urine Test'),
+(3, 'X-Ray'),
+(4, 'MRI'),
+(5, 'CT Scan'),
+(6, 'EKG'),
+(7, 'Lipid Profile');
+
 
 -- Populating the appointment_result table
 -- INSERT INTO appointment_result (appointment_id, test_type, table_name, fields_definition)
