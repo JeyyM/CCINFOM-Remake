@@ -81,7 +81,7 @@ export default function InputPage() {
   };
 
   return (
-    <div className='vertical'>
+    <div className='vertical' style={{marginTop:"25rem"}}>
       <h1>Insert Data into Table</h1>
       <Link href="..">Back</Link>
 

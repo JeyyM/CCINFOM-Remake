@@ -16,31 +16,20 @@ CREATE TABLE person (
     province_name VARCHAR(45) NOT NULL
 );
 
--- Create REF_job table
--- CREATE TABLE REF_job (
---     job_id INT AUTO_INCREMENT PRIMARY KEY,
---     job_name VARCHAR(45) NOT NULL UNIQUE,
---     job_description TEXT,
---     min_salary DECIMAL(10, 2),
---     max_salary DECIMAL(10, 2),
---     CONSTRAINT valid_range CHECK (min_salary >= 0),
---     CONSTRAINT valid_max CHECK (max_salary > min_salary)
--- );
+-- Create patient table
+CREATE TABLE patient (
+     person_id INT PRIMARY KEY,
+     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE
+);
 
 -- Create staff table
 CREATE TABLE staff (
     person_id INT PRIMARY KEY,
-    job VARCHAR(50) NOT NULL,
+    job_name VARCHAR(50) NOT NULL,
 	monthly_salary DECIMAL(10, 2) NOT NULL,
-    status ENUM('Active', 'Inactive') NOT NULL DEFAULT 'Active',
+    status ENUM('Hired', 'Fired') NOT NULL DEFAULT 'Active',
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     CONSTRAINT valid_salary CHECK (monthly_salary >= 0)
-);
-
--- Create patient table
-CREATE TABLE patient (
-    person_id INT PRIMARY KEY,
-    FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE
 );
 
 -- Create appointment table
@@ -69,26 +58,14 @@ CREATE TABLE bill (
 
 -- Create REF_test_type table
 CREATE TABLE REF_test_type (
-    test_id INT AUTO_INCREMENT PRIMARY KEY,
-    test_name VARCHAR(45) NOT NULL UNIQUE,
+    test_name VARCHAR(45) PRIMARY KEY,
     test_price DECIMAL(10, 2) NOT NULL,
     CONSTRAINT valid_price CHECK (test_price >= 0)
 );
 
 CREATE TABLE junction_table (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    FOREIGN KEY (appointment_id) REFERENCES appointment(appointment_id) ON DELETE CASCADE,
+    appointment_id INT PRIMARY KEY,
     test_name VARCHAR(45) NOT NULL UNIQUE,
-    CONSTRAINT valid_price CHECK (test_price >= 0)
+    FOREIGN KEY (appointment_id) REFERENCES appointment(appointment_id) ON DELETE CASCADE,
+    FOREIGN KEY (test_name) REFERENCES REF_test_type(test_name) ON DELETE RESTRICT
 );
-
--- Create appointment_result table
--- CREATE TABLE appointment_result (
---     appointment_id INT NOT NULL,
---     test_type INT NOT NULL,
---     table_name VARCHAR(45) NOT NULL,
---     fields_definition JSON NOT NULL,
---     PRIMARY KEY (appointment_id, test_type),
---     FOREIGN KEY (appointment_id) REFERENCES appointment(appointment_id) ON DELETE CASCADE,
---     FOREIGN KEY (test_type) REFERENCES REF_test_type(test_id) ON DELETE RESTRICT
--- );

@@ -57,7 +57,7 @@ export default function InputPage() {
   };
 
   return (
-    <div>
+    <div style={{marginTop:"25rem"}}>
       <h1>CREATE NEW TABLE</h1>
       <form onSubmit={handleSubmit}>
         <div>
