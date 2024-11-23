@@ -527,7 +527,7 @@ export default function Appointments() {
                   <button
                     onClick={() => removeTest(index)}
                     className='dropdown-item detail-text-dark'
-                    style={{ border: "none", width: "7%" }}>
+                    style={{ width: "7%" }}>
                     -
                   </button>
                 </div>

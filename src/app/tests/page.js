@@ -91,7 +91,7 @@ export default function Employees() {
             <div key={index} className="test-item">
                 <div className="set-name text-medium-dark-bold">{tableName} <span className='text-medium-dark' style={{marginLeft:"auto"}}>Cost: </span> 
                 <input className='form-input text-small-dark' style={{width:"25%", marginRight:"0"}}></input>
-                <button className='dark-button text-small-light' style={{width:"min-content"}}>Modify</button></div>
+                <button className='dark-button text-small-light' style={{width:"min-content"}} >Modify</button></div>
 
                 <div className='test-fields'>
                 {columns.map((column, idx) => (

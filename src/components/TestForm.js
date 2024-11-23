@@ -211,10 +211,10 @@ const TestForm = ({ onClose }) => {
                         );
                     })}
 
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-                    {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-                    {error2 && <p style={{ color: 'red' }}>{error2}</p>}
-                    {successMessage2 && <p style={{ color: 'green' }}>{successMessage2}</p>}
+                    {error && <p className='warning-text '>{error}</p>}
+                    {/* {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>} */}
+                    {error2 && <p className='warning-text'>{error2}</p>}
+                    {/* {successMessage2 && <p style={{ color: 'green' }}>{successMessage2}</p>} */}
 
                     <div className="form-row">
                         <button type="button" className="large-button-outline detail-text-white" onClick={onClose}>
