@@ -1,138 +1,68 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import ViewSet from '@/components/ViewSet';
 
 export default function Appointments() {
-  const data = [
-    {
-      id: 1,
-      date: "JAN 01, 2024 08:00 AM",
-      creation_date: "JAN 01, 2024 08:00 AM",
-      updated_date: "JAN 01, 2024 08:00 AM",
-      patient: {
-        name: "Doe, John",
-        email: "johndoe@gmail.com",
-      },
-      staff: {
-        name: "Smith, Alice",
-      },
-      payment: {
-        total: 1000,
-        due: 1000,
-        paid: 0,
-      },
-      status: "scheduled",
-    },
-    {
-      id: 2,
-      date: "JAN 02, 2024 10:30 AM",
-      creation_date: "JAN 01, 2024 09:00 AM",
-      updated_date: "JAN 02, 2024 09:30 AM",
-      patient: {
-        name: "Johnson, Emily",
-        email: "emilyjohnson@gmail.com",
-      },
-      staff: {
-        name: "Brown, Mike",
-      },
-      payment: {
-        total: 1500,
-        due: 1500,
-        paid: 0,
-      },
-      status: "cancelled",
-    },
-    {
-      id: 3,
-      date: "JAN 03, 2024 11:00 AM",
-      creation_date: "JAN 02, 2024 12:00 PM",
-      updated_date: "JAN 03, 2024 10:00 AM",
-      patient: {
-        name: "Taylor, Samantha",
-        email: "samanthataylor@gmail.com",
-      },
-      staff: {
-        name: "Wilson, Mark",
-      },
-      payment: {
-        total: 2000,
-        due: 1000,
-        paid: 1000,
-      },
-      status: "completed",
-    },
-    {
-      id: 4,
-      date: "JAN 04, 2024 02:00 PM",
-      creation_date: "JAN 03, 2024 01:30 PM",
-      updated_date: "JAN 04, 2024 01:00 PM",
-      patient: {
-        name: "Clark, Sarah",
-        email: "sarahclark@gmail.com",
-      },
-      staff: {
-        name: "Evans, David",
-      },
-      payment: {
-        total: 1200,
-        due: 600,
-        paid: 600,
-      },
-      status: "completed",
-    },
-    {
-      id: 5,
-      date: "JAN 05, 2024 04:00 PM",
-      creation_date: "JAN 04, 2024 03:00 PM",
-      updated_date: "JAN 05, 2024 03:30 PM",
-      patient: {
-        name: "Morris, Kevin",
-        email: "kevinmorris@gmail.com",
-      },
-      staff: {
-        name: "Walker, Jessica",
-      },
-      payment: {
-        total: 1800,
-        due: 1800,
-        paid: 0,
-      },
-      status: "scheduled",
-    },
-  ];
-
-  // SORTING DETAILS
+  const [data, setData] = useState([]);
   const [viewChoice, setViewChoice] = useState('scheduled');
   const [sortChoice, setSortChoice] = useState('appointment_date');
   const [orderChoice, setOrderChoice] = useState('desc');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+
+      const orderBy = `${sortChoice} ${orderChoice === 'desc' ? 'DESC' : 'ASC'}`;
+      const whereClause = `status = '${viewChoice}'`;
+
+      try {
+        const response = await fetch(
+          `/api/getData?type=query&table=appointment&columns=appointment_id AS id, appointment_date AS date, created_at AS creation_date, updated_at AS updated_date, status, 
+            (SELECT CONCAT(last_name, ', ', first_name) FROM person WHERE person_id = appointment.patient_id) AS patient_name,
+            (SELECT email FROM person WHERE person_id = appointment.patient_id) AS patient_email,
+            (SELECT CONCAT(last_name, ', ', first_name) FROM person WHERE person_id = appointment.staff_id) AS staff_name,
+            (SELECT total FROM bill WHERE appointment_id = appointment.appointment_id) AS total,
+            (SELECT total - paid FROM bill WHERE appointment_id = appointment.appointment_id) AS due,
+            (SELECT paid FROM bill WHERE appointment_id = appointment.appointment_id) AS paid
+          &where=${encodeURIComponent(whereClause)}
+          &orderBy=${encodeURIComponent(orderBy)}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+
+        const result = await response.json();
+        const formattedData = result.map((item) => ({
+          id: item.id,
+          date: item.date,
+          creation_date: item.creation_date,
+          updated_date: item.updated_date,
+          patient: { name: item.patient_name, email: item.patient_email },
+          staff: { name: item.staff_name },
+          payment: { total: item.total, due: item.due, paid: item.paid },
+          status: item.status.toLowerCase(),
+        }));
+
+        setData(formattedData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [viewChoice, sortChoice, orderChoice]);
 
   const handleSortChange = (e) => {
     setSortChoice(e.target.value);
   };
-
-  const filteredSets = data
-  .filter((set) =>
-    set.status === viewChoice
-  )
-  .sort((a, b) => {
-    let comparison = 0;
-
-    if (sortChoice === 'appointment_date') {
-      comparison = new Date(a.date) - new Date(b.date);
-    } else if (sortChoice === 'creation_date') {
-      comparison = new Date(a.creation_date) - new Date(b.creation_date);
-    } else if (sortChoice === 'updated_date') {
-      comparison = new Date(a.updated_date) - new Date(b.updated_date);
-    } else if (sortChoice === 'total') {
-      comparison = a.payment.total - b.payment.total;
-    } else if (sortChoice === 'last_name') {
-      comparison = a.patient.name.localeCompare(b.patient.name);
-    }
-
-    return orderChoice === 'desc' ? -comparison : comparison;
-  });
 
   return (
     <div className='view-appointments-page background'>
@@ -174,12 +104,17 @@ export default function Appointments() {
           </div>
         </div>
 
-        <div className="set-collection">
-          {filteredSets.map((set, index) => (
-            <ViewSet key={index} set={set} />
-          ))}
-        </div>
-
+        {loading ? (
+          <div>Loading...</div>
+        ) : error ? (
+          <div className="error">{error}</div>
+        ) : (
+          <div className="set-collection">
+            {data.map((set, index) => (
+              <ViewSet key={index} set={set} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
