@@ -12,6 +12,7 @@ const TestForm = ({ onClose }) => {
     // State to manage the form fields
     const [formData, setFormData] = useState([
         { name: 'ID', nullable: false, dataType: 'INT', isPrimaryKey: true, autoIncrement: true }, // Default primary key field
+        { name: 'appointment_id', nullable: false, dataType: 'INT', isPrimaryKey: false, autoIncrement: false }, // Appointment id field
         { name: '', nullable: true, dataType: 'VARCHAR(45)', isPrimaryKey: false, autoIncrement: false },
     ]);
 
@@ -85,7 +86,7 @@ const TestForm = ({ onClose }) => {
 
         const inputData = {
             test_name: tableName,
-            test_price: testPrice,
+            test_price: testPrice
         };
 
         try {
@@ -173,7 +174,7 @@ const TestForm = ({ onClose }) => {
                     </div>
 
                     {formData.map((field, index) => {
-                        if (index === 0) return null; // Skip primary key field
+                        if (index === 0 || index === 1) return null; // Skip primary key field
                         return (
                             <div key={index} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: "center", justifyContent: "center" }}>
                                 <div className="form-group">

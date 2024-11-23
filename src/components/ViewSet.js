@@ -2,17 +2,19 @@ import React from 'react';
 
 // THE DISPLAY OF APPOINTMENT DETAILS
 const ViewSet = ({ set }) => {
+
+  console.log(set);
   return (
     <div className="item-set">
       <div className="set-q1">
         <div className="set-date text-medium-dark-bold">{set.date}</div>
         <h2 className="text-small-dark">
           <span className="text-small-dark-bold">CREATED: </span>
-          {set.createdDate}
+          {set.creation_date}
         </h2>
         <h2 className="text-small-dark">
           <span className="text-small-dark-bold">UPDATED: </span>
-          {set.updatedDate}
+          {set.updated_date}
         </h2>
       </div>
 

@@ -318,6 +318,7 @@ export default function Appointments() {
 
   // OVERARCHING DATA HOLDERS
   const [patientList, setPatientList] = useState(patientData);
+  const [testList, setTestList] = useState(availableTests);
   const [employeeList, setEmployeeList] = useState(employeeData);
 
   // WHERE PATIENT DATA IS SET
@@ -379,7 +380,7 @@ export default function Appointments() {
 
   const handleTestChange = (index, selectedTest) => {
     const updatedTests = [...selectedTests];
-    const testDetails = availableTests.find(test => test.name === selectedTest);
+    const testDetails = testList.find(test => test.name === selectedTest);
 
     if (testDetails) {
       updatedTests[index] = { test: testDetails.name, price: testDetails.price };
@@ -514,7 +515,7 @@ export default function Appointments() {
                     className="dropdown-item detail-text-dark"
                     style={{ width: '63%' }}>
                     <option value="">Select a test</option>
-                    {availableTests.map((test, index) => (
+                    {testList.map((test, index) => (
                       <option key={index} value={test.name}>{test.name}</option>
                     ))}
                   </select>

@@ -67,6 +67,25 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
         };
         try {
             //Submit data to the database
+          const res = await fetch('/api/getData?type=', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tableName: destination, formData: inputData })
+          });
+          //checks if submit was successful
+          const response = await res.json();
+          if (res.ok) {
+            setSuccessMessage2(response.message);
+            onClose();
+          } else {
+            setErrorState(response.error);
+          }
+        } catch (err) {
+          setErrorState('Failed to insert data');
+        }
+
+        try {
+            //Submit data to the database
           const res = await fetch('/api/getData?type=add', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -105,6 +124,8 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
         } catch (err) {
           setErrorState('Failed to insert data');
         }
+
+        //TODO: Have to query to put in staff table
     };
     // SENDS FORM DATA TO THE ORIGINAL PAGE
     const handleSubmit = (e) => {

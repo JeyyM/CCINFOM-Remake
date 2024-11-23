@@ -52,6 +52,9 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, patientList, onClose
             phone_number: formData.phone,
             email: formData.email,
             sex: formData.sex,
+            street_name: formData.street,
+            city_name: formData.city,
+            province_name: formData.province,
         };
 
         try {
@@ -76,32 +79,34 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, patientList, onClose
         }
 
         // Filling out the person_address table
-        const inputData2 = {
-            street_name: formData.street,
-            city_name: formData.city,
-            province_name: formData.province,
-        };
-        try {
-            //Submit data to the database
-          const res = await fetch('/api/getData?type=add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tableName: "person_address", formData: inputData2 })
-          });
-          //checks if submit was successful
-          const response = await res.json();
-          if (res.ok) {
-            setSuccessMessage(response.message);
+        // const inputData2 = {
+        //     street_name: formData.street,
+        //     city_name: formData.city,
+        //     province_name: formData.province,
+        // };
+        // try {
+        //     //Submit data to the database
+        //   const res = await fetch('/api/getData?type=add', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({ tableName: "person_address", formData: inputData2 })
+        //   });
+        //   //checks if submit was successful
+        //   const response = await res.json();
+        //   if (res.ok) {
+        //     setSuccessMessage(response.message);
 
-          } else {
-            setErrorState(response.error);
-          }
-        } catch (err) {
-          setErrorState('Failed to insert data');
-        }
+        //   } else {
+        //     setErrorState(response.error);
+        //   }
+        // } catch (err) {
+        //   setErrorState('Failed to insert data');
+        // }
+        //TODO have to query in order to put in patient table
 
         
     };
+
 
     // SENDS INPUT DATA
     const handleSubmit = async (e) => {
