@@ -30,12 +30,10 @@ CREATE TABLE person (
 -- Create staff table
 CREATE TABLE staff (
     person_id INT PRIMARY KEY,
-    job_id INT NOT NULL,
-    monthly_salary DECIMAL(10, 2) NOT NULL,
-    status ENUM('Active', 'Inactive') NOT NULL DEFAULT 'Active',
-    FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     job VARCHAR(50) NOT NULL,
 	monthly_salary DECIMAL(10, 2) NOT NULL,
+    status ENUM('Active', 'Inactive') NOT NULL DEFAULT 'Active',
+    FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     CONSTRAINT valid_salary CHECK (monthly_salary >= 0)
 );
 
@@ -77,13 +75,20 @@ CREATE TABLE REF_test_type (
     CONSTRAINT valid_price CHECK (test_price >= 0)
 );
 
--- Create appointment_result table
-CREATE TABLE appointment_result (
-    appointment_id INT NOT NULL,
-    test_type INT NOT NULL,
-    table_name VARCHAR(45) NOT NULL,
-    fields_definition JSON NOT NULL,
-    PRIMARY KEY (appointment_id, test_type),
+CREATE TABLE junction_table (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     FOREIGN KEY (appointment_id) REFERENCES appointment(appointment_id) ON DELETE CASCADE,
-    FOREIGN KEY (test_type) REFERENCES REF_test_type(test_id) ON DELETE RESTRICT
+    test_name VARCHAR(45) NOT NULL UNIQUE,
+    CONSTRAINT valid_price CHECK (test_price >= 0)
 );
+
+-- Create appointment_result table
+-- CREATE TABLE appointment_result (
+--     appointment_id INT NOT NULL,
+--     test_type INT NOT NULL,
+--     table_name VARCHAR(45) NOT NULL,
+--     fields_definition JSON NOT NULL,
+--     PRIMARY KEY (appointment_id, test_type),
+--     FOREIGN KEY (appointment_id) REFERENCES appointment(appointment_id) ON DELETE CASCADE,
+--     FOREIGN KEY (test_type) REFERENCES REF_test_type(test_id) ON DELETE RESTRICT
+-- );
