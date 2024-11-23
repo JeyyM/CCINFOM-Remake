@@ -681,7 +681,13 @@ body {
   height: 3rem;
   background-color: white;
   border-radius: 2rem;
-  border: none;
+  border: 2px solid transparent;
+  transition: all 0.2s ease-in;
+}
+
+.input-small:hover {
+  border-color: var(--theme-5);
+
 }
 
 .input-large {

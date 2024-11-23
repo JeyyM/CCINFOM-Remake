@@ -174,6 +174,8 @@ export async function PUT(req) {
   try {
     const { tableName, formData, primaryKey, primaryValue } = await req.json();
 
+    console.log("ITEMS: ", tableName, formData, primaryKey, primaryValue);
+
     if (!tableName || !formData || Object.keys(formData).length === 0 || !primaryKey || !primaryValue) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields: tableName, formData, primaryKey, or primaryValue' }),

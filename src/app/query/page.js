@@ -133,7 +133,7 @@ export default function Query() {
     };
 
     return (
-        <div className='vertical' style={{marginTop:"25rem"}}>
+        <div className='vertical'>
             {selectedItem && (
                 <ResultPopup
                     selectedItem={selectedItem}
