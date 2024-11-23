@@ -53,7 +53,27 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
 
         return Object.keys(errors).length === 0;
     };
-
+    const fetchLatestPersonId = async () => {
+        const tableName = "person";
+        const columns = "MAX(person_id) AS person_id"; // Query for the maximum person_id
+    
+        try {
+            const response = await fetch(
+                `/api/getData?type=query&table=${tableName}&columns=${columns}`
+            );
+    
+            const data = await response.json();
+            console.log("Fetched person_id:", data);
+            if (response.ok && data.length > 0) {
+                return data[0].person_id;
+            } else {
+                throw new Error('Failed to fetch the latest person_id');
+            }
+        } catch (error) {
+            console.error("Error fetching the latest person_id:", error.message);
+            throw error;
+        }
+    };
     const handleSaveEmployee = async () => {
         const destination = "person";
         setErrorState('');
@@ -80,11 +100,11 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
     
             const response = await res.json();
             if (res.ok) {
-                const personId = response.person_id;  // Get the person_id from the response
-                
+                const person_id = response.person_id;  // Get the person_id from the response
+                const destination2 = "staff"
                 // Insert into staff table
                 const staffData = {
-                    person_id: personId,
+                    person_id: person_id,
                     job_name: formData.job,
                     monthly_salary: formData.monthly_salary,
                     status: 'Hired',  // Default status (can be dynamic based on form data)
@@ -93,7 +113,7 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
                 const staffRes = await fetch('/api/getData?type=add', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tableName: "staff", formData: staffData })
+                    body: JSON.stringify({ tableName: destination2, formData: staffData })
                 });
     
                 const staffResponse = await staffRes.json();
@@ -110,6 +130,35 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
         } catch (err) {
             setErrorState('Failed to insert data');
         }
+        const destination2 = "staff"
+        const person_id = await fetchLatestPersonId();
+        const inputData2 = {
+            person_id: person_id,
+            job_name: formData.job,
+            monthly_salary: formData.monthly_salary,
+            status: 'Hired', 
+        };
+
+        console.log("Fetched person_id:", person_id);
+        try {
+            //Submit data to the database
+          const res = await fetch('/api/getData?type=add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tableName: destination2, formData: inputData2 })
+          });
+          //checks if submit was successful
+          const response = await res.json();
+          if (res.ok) {
+            setSuccessMessage(response.message);
+
+          } else {
+            setErrorState(response.error);
+          }
+        } catch (err) {
+          setErrorState('Failed to insert data');
+        }
+
     };
 
     // SENDS FORM DATA TO THE ORIGINAL PAGE
