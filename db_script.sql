@@ -17,15 +17,15 @@ CREATE TABLE person (
 );
 
 -- Create REF_job table
-CREATE TABLE REF_job (
-    job_id INT AUTO_INCREMENT PRIMARY KEY,
-    job_name VARCHAR(45) NOT NULL UNIQUE,
-    job_description TEXT,
-    min_salary DECIMAL(10, 2),
-    max_salary DECIMAL(10, 2),
-    CONSTRAINT valid_range CHECK (min_salary >= 0),
-    CONSTRAINT valid_max CHECK (max_salary > min_salary)
-);
+-- CREATE TABLE REF_job (
+--     job_id INT AUTO_INCREMENT PRIMARY KEY,
+--     job_name VARCHAR(45) NOT NULL UNIQUE,
+--     job_description TEXT,
+--     min_salary DECIMAL(10, 2),
+--     max_salary DECIMAL(10, 2),
+--     CONSTRAINT valid_range CHECK (min_salary >= 0),
+--     CONSTRAINT valid_max CHECK (max_salary > min_salary)
+-- );
 
 -- Create staff table
 CREATE TABLE staff (
@@ -34,7 +34,8 @@ CREATE TABLE staff (
     monthly_salary DECIMAL(10, 2) NOT NULL,
     status ENUM('Active', 'Inactive') NOT NULL DEFAULT 'Active',
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
-    FOREIGN KEY (job_id) REFERENCES REF_job(job_id) ON DELETE RESTRICT,
+    job VARCHAR(50) NOT NULL,
+	monthly_salary DECIMAL(10, 2) NOT NULL,
     CONSTRAINT valid_salary CHECK (monthly_salary >= 0)
 );
 
