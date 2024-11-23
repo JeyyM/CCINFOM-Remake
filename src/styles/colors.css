@@ -1,0 +1,18 @@
+:root {
+    --bg-color: #091B2F;
+    --theme-1: #114B57;
+    --theme-2: #114B57;
+    --theme-3: #1C5D83;
+    --theme-4: #B7ECFF;
+    --theme-4b: rgba(50, 200, 255, 0.815);
+
+    --theme-5: #004D95;
+    --theme-5-b: #0069cc;
+    --theme-6: #02284C;
+    --theme-7: #000331;
+    --theme-8: #00174C;
+  
+    --text-color: white;
+    --text-color-2: #091B2F;
+    --warning-color: #FF777A;
+  }

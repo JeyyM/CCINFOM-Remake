@@ -1,0 +1,162 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;600;700;800;&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+.title-text {
+  font-family: "Outfit", sans-serif;
+  font-weight: 800;
+  font-size: 10rem;
+  color: var(--text-color);
+}
+
+.text-small-white-bold {
+  color: white;
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.text-small-white {
+  color: white;
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+}
+
+.text-small-dark-bold {
+  color: var(--text-color-2);
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.text-small-dark {
+  color: var(--text-color-2);
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+}
+
+.text-small-light-bold {
+  color: var(--theme-4);
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.text-small-light {
+  color: var(--theme-4);
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+}
+
+.text-medium-dark {
+  color: var(--text-color-2);
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  font-size: 2rem;
+}
+
+.text-medium-dark-bold {
+  color: var(--text-color-2);
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.text-medium-dark-2 {
+  font-family: "Outfit", sans-serif;
+  font-weight: 500;
+  font-size: 2.5rem;
+  color: var(--text-color-2);
+  letter-spacing: 0.3rem;
+  text-decoration: none;
+}
+
+.nav-white {
+  color: white;
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5rem;
+  text-decoration: none;
+}
+
+.text-medium-white {
+  color: white;
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  text-decoration: none;
+  font-size: 2rem;
+}
+
+.text-medium-white-bold {
+  color: white;
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 2rem;
+}
+
+.text-large-white {
+  color: white;
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5rem;
+  text-decoration: none;
+  font-size: 3rem;
+}
+
+
+.text-large-white-bold {
+  color: white;
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5rem;
+  text-decoration: none;
+  font-size: 3rem;
+}
+
+.detail-text-white {
+  color: white;
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.2rem;
+  text-decoration: none;
+  font-size: 2.2rem;
+}
+
+.detail-text-white-bold {
+  color: white;
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.2rem;
+  text-decoration: none;
+  font-size: 2.2rem;
+}
+
+.detail-text-light {
+  color: var(--theme-4);
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.2rem;
+  text-decoration: none;
+  font-size: 2.2rem;
+}
+
+.detail-text-dark {
+  color: var(--text-color-2);
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.2rem;
+  text-decoration: none;
+  font-size: 2.2rem;
+}
+
+.warning-text {
+  color: var(--warning-color);
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  text-decoration: none;
+  font-size: 2rem;
+  font-style: italic;
+}
