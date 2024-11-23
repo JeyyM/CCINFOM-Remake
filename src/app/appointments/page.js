@@ -348,9 +348,9 @@ export default function Appointments() {
   // ERROR MESSAGES FOR THE VALIDATIONS, MAKE "" TO BE BLANK
   const [patientError, setPatientError] = useState('Select a patient.');
   const [staffError, setStaffError] = useState('Select a staff.');
-  const [monthError, setMonthError] = useState('Schedule must be set in the future (validate).');
-  const [testError, setTestError] = useState('Select at least one test.');
-  const [testError2, setTestError2] = useState('No more tests can be added.');
+  const [monthError, setMonthError] = useState('Schedule must be set in the future (validate)');
+  const [testError, setTestError] = useState('Select at least 1 test');
+  const [testError2, setTestError2] = useState('No more tests can be added');
 
   // FOR TIME KEEPING AND FORMATTING TO SQL
   const today = new Date();

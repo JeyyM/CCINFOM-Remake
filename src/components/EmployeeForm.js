@@ -9,39 +9,18 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
         status: selectedEmployee.status !== null && selectedEmployee.status !== undefined ? selectedEmployee.status : true,
     });
 
-    const [staffList, setStaffList] = useState([]);
-    const [errorState, setErrorState] = useState({});
-    const [successMessage, setSuccessMessage] = useState('');
-
-    // Fetch staff list when component mounts
-    useEffect(() => {
-        const fetchStaff = async () => {
-            try {
-                const res = await fetch('/api/getStaff');  // Adjust the API endpoint as needed
-                const data = await res.json();
-                if (res.ok) {
-                    setStaffList(data);
-                } else {
-                    setErrorState({ staff: 'Failed to fetch staff list' });
-                }
-            } catch (error) {
-                setErrorState({ staff: 'Failed to fetch staff list' });
-            }
-        };
-        fetchStaff();
-    }, []);
-
-    // To change the selected employee
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
         setErrorState((prev) => ({ ...prev, [name]: '' }));
     };
 
+    // TO CHANGE HIRED/FIRED
     const toggleStatus = () => {
         setFormData((prev) => ({ ...prev, status: !prev.status }));
     };
 
+    // FOR STATUSLESS/NEW EMPLOYEES
     useEffect(() => {
         setFormData({
             ...selectedEmployee,
@@ -50,9 +29,13 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
         setErrorState({});
     }, [selectedEmployee]);
 
-    // Validation
+    // TO HOLD THE ERRORS
+    const [errorState, setErrorState] = useState({});
+
+    // FOR ERROR CHECKING, IS INCOMPLETE/UNSPECIFIC
     const validateForm = () => {
         const errors = {};
+
         if (!formData.first_name) errors.first_name = 'First name is required.';
         if (!formData.last_name) errors.last_name = 'Last name is required.';
         if (!formData.birthday) errors.birthday = 'Birthday is required.';
@@ -65,13 +48,14 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
         if (!formData.hire_date) errors.hire_date = 'Hire date is required.';
         if (!formData.job) errors.job = 'Job is required.';
         if (!formData.monthly_salary) errors.monthly_salary = 'Monthly salary is required.';
+
         setErrorState(errors);
+
         return Object.keys(errors).length === 0;
     };
-
     const handleSaveEmployee = async () => {
         const destination = "person";
-        setErrorState({});
+        setErrorState('');
 
         const inputData = {
             first_name: formData.first_name,
@@ -80,170 +64,82 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
             phone_number: formData.phone,
             email: formData.email,
             sex: formData.sex,
+            street_name: formData.street,
+            city_name: formData.city,
+            province_name: formData.province,
         };
-
         try {
-            const res = await fetch('/api/getData?type=', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ tableName: destination, formData: inputData })
-            });
-            const response = await res.json();
-            if (res.ok) {
-                setSuccessMessage(response.message);
-                onClose();
-            } else {
-                setErrorState(response.error);
-            }
+            //Submit data to the database
+          const res = await fetch('/api/getData?type=add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tableName: destination, formData: inputData })
+          });
+          //checks if submit was successful
+          const response = await res.json();
+          if (res.ok) {
+            setSuccessMessage2(response.message);
+            onClose();
+          } else {
+            setErrorState(response.error);
+          }
         } catch (err) {
-            setErrorState('Failed to insert data');
+          setErrorState('Failed to insert data');
         }
+        /*
+        try {
+            //Submit data to the database
+          const res = await fetch('/api/getData?type=add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tableName: destination, formData: inputData })
+          });
+          //checks if submit was successful
+          const response = await res.json();
+          if (res.ok) {
+            setSuccessMessage2(response.message);
+            onClose();
+          } else {
+            setErrorState(response.error);
+          }
+        } catch (err) {
+          setErrorState('Failed to insert data');
+        }
+        
+        // Filling out the ref_job table
+        const inputData2 = {
+            job_name: formData.job,
+        };
+        try {
+            //Submit data to the database
+          const res = await fetch('/api/getData?type=add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tableName: "REF_job", formData: inputData2 })
+          });
+          //checks if submit was successful
+          const response = await res.json();
+          if (res.ok) {
+            setSuccessMessage(response.message);
 
-        // Additional saving logic...
+          } else {
+            setErrorState(response.error);
+          }
+        } catch (err) {
+          setErrorState('Failed to insert data');
+        }
+        */
+        //TODO: Have to query to put in staff table
     };
-
+    // SENDS FORM DATA TO THE ORIGINAL PAGE
     const handleSubmit = (e) => {
         e.preventDefault();
+
         if (validateForm()) {
             handleSaveEmployee(formData);
             onClose();
         }
     };
-    
-    // // WHERE FORM DATA IS KEPT AS A DICTIONARY/OBJECT
-    // const [formData, setFormData] = useState({
-    //     ...selectedEmployee,
-    //     // FOR CHANGING HIRED/FIRED
-    //     status: selectedEmployee.status !== null && selectedEmployee.status !== undefined ? selectedEmployee.status : true,
-    // });
-
-    // const handleChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData((prev) => ({ ...prev, [name]: value }));
-    //     setErrorState((prev) => ({ ...prev, [name]: '' }));
-    // };
-
-    // // TO CHANGE HIRED/FIRED
-    // const toggleStatus = () => {
-    //     setFormData((prev) => ({ ...prev, status: !prev.status }));
-    // };
-
-    // // FOR STATUSLESS/NEW EMPLOYEES
-    // useEffect(() => {
-    //     setFormData({
-    //         ...selectedEmployee,
-    //         status: selectedEmployee.status !== null && selectedEmployee.status !== undefined ? selectedEmployee.status : true
-    //     });
-    //     setErrorState({});
-    // }, [selectedEmployee]);
-
-    // // TO HOLD THE ERRORS
-    // const [errorState, setErrorState] = useState({});
-
-    // // FOR ERROR CHECKING, IS INCOMPLETE/UNSPECIFIC
-    // const validateForm = () => {
-    //     const errors = {};
-
-    //     if (!formData.first_name) errors.first_name = 'First name is required.';
-    //     if (!formData.last_name) errors.last_name = 'Last name is required.';
-    //     if (!formData.birthday) errors.birthday = 'Birthday is required.';
-    //     if (!formData.phone) errors.phone = 'Phone is required.';
-    //     if (!formData.email) errors.email = 'Email is required.';
-    //     if (!formData.sex) errors.sex = 'Sex is required.';
-    //     if (!formData.street) errors.street = 'Street is required.';
-    //     if (!formData.city) errors.city = 'City is required.';
-    //     if (!formData.province) errors.province = 'Province is required.';
-    //     if (!formData.hire_date) errors.hire_date = 'Hire date is required.';
-    //     if (!formData.job) errors.job = 'Job is required.';
-    //     if (!formData.monthly_salary) errors.monthly_salary = 'Monthly salary is required.';
-
-    //     setErrorState(errors);
-
-    //     return Object.keys(errors).length === 0;
-    // };
-    // const handleSaveEmployee = async () => {
-    //     const destination = "person";
-    //     setErrorState('');
-
-    //     const inputData = {
-    //         first_name: formData.first_name,
-    //         last_name: formData.last_name,
-    //         date_of_birth: formData.birthday,
-    //         phone_number: formData.phone,
-    //         email: formData.email,
-    //         sex: formData.sex,
-    //     };
-    //     try {
-    //         //Submit data to the database
-    //       const res = await fetch('/api/getData?type=', {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({ tableName: destination, formData: inputData })
-    //       });
-    //       //checks if submit was successful
-    //       const response = await res.json();
-    //       if (res.ok) {
-    //         setSuccessMessage2(response.message);
-    //         onClose();
-    //       } else {
-    //         setErrorState(response.error);
-    //       }
-    //     } catch (err) {
-    //       setErrorState('Failed to insert data');
-    //     }
-
-    //     try {
-    //         //Submit data to the database
-    //       const res = await fetch('/api/getData?type=add', {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({ tableName: destination, formData: inputData })
-    //       });
-    //       //checks if submit was successful
-    //       const response = await res.json();
-    //       if (res.ok) {
-    //         setSuccessMessage2(response.message);
-    //         onClose();
-    //       } else {
-    //         setErrorState(response.error);
-    //       }
-    //     } catch (err) {
-    //       setErrorState('Failed to insert data');
-    //     }
-    //     // Filling out the ref_job table
-    //     const inputData2 = {
-    //         job_name: formData.job,
-    //     };
-    //     try {
-    //         //Submit data to the database
-    //       const res = await fetch('/api/getData?type=add', {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({ tableName: "REF_job", formData: inputData2 })
-    //       });
-    //       //checks if submit was successful
-    //       const response = await res.json();
-    //       if (res.ok) {
-    //         setSuccessMessage(response.message);
-
-    //       } else {
-    //         setErrorState(response.error);
-    //       }
-    //     } catch (err) {
-    //       setErrorState('Failed to insert data');
-    //     }
-
-    //     //TODO: Have to query to put in staff table
-    // };
-    // // SENDS FORM DATA TO THE ORIGINAL PAGE
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-
-    //     if (validateForm()) {
-    //         handleSaveEmployee(formData);
-    //         onClose();
-    //     }
-    // };
 
     return (
         <>
