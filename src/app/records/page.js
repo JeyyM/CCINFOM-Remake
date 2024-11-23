@@ -3,6 +3,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import ViewSet from '@/components/ViewSet';
+import LineGraph from '@/components/LineGraph';
+import PieChart from '@/components/PieGraph';
+import BarChart from '@/components/BarGraph';
+import MultiLineGraph from '@/components/MultiLineGraph';
 
 export default function Records() {
   const data = [
@@ -113,30 +117,73 @@ export default function Records() {
   };
 
   const filteredSets = data
-  .filter((set) =>
-    set.status === viewChoice
-  )
-  .sort((a, b) => {
-    let comparison = 0;
+    .filter((set) =>
+      set.status === viewChoice
+    )
+    .sort((a, b) => {
+      let comparison = 0;
 
-    if (sortChoice === 'appointment_date') {
-      comparison = new Date(a.date) - new Date(b.date);
-    } else if (sortChoice === 'creation_date') {
-      comparison = new Date(a.creation_date) - new Date(b.creation_date);
-    } else if (sortChoice === 'updated_date') {
-      comparison = new Date(a.updated_date) - new Date(b.updated_date);
-    } else if (sortChoice === 'total') {
-      comparison = a.payment.total - b.payment.total;
-    } else if (sortChoice === 'last_name') {
-      comparison = a.patient.name.localeCompare(b.patient.name);
+      if (sortChoice === 'appointment_date') {
+        comparison = new Date(a.date) - new Date(b.date);
+      } else if (sortChoice === 'creation_date') {
+        comparison = new Date(a.creation_date) - new Date(b.creation_date);
+      } else if (sortChoice === 'updated_date') {
+        comparison = new Date(a.updated_date) - new Date(b.updated_date);
+      } else if (sortChoice === 'total') {
+        comparison = a.payment.total - b.payment.total;
+      } else if (sortChoice === 'last_name') {
+        comparison = a.patient.name.localeCompare(b.patient.name);
+      }
+
+      return orderChoice === 'desc' ? -comparison : comparison;
+    });
+
+
+  var dates = [
+    "1990-01-01",
+    "1990-01-15",
+    "1990-02-01",
+    "1990-02-14",
+    "1990-03-01",
+    "1990-03-15",
+    "1990-04-01",
+    "1990-04-15",
+    "1990-05-01",
+    "1990-05-15",
+  ]
+
+  const sales = [
+    500,
+    600,
+    900,
+    100,
+    1200,
+    800,
+    450,
+    1100,
+    750,
+    950,
+  ];
+
+  const datasets = [
+    {
+      label: 'Product A Sales',
+      data: [200, 300, 400, 350, 450, 500],
+    },
+    {
+      label: 'Product B Sales',
+      data: [150, 250, 350, 400, 300, 200],
+    },
+    {
+      label: 'Product C Sales',
+      data: [100, 200, 150, 300, 400, 450],
     }
+  ];
 
-    return orderChoice === 'desc' ? -comparison : comparison;
-  });
 
   return (
-    <div className='view-appointments-page background'>
-      <div className='view-appointments-menu'>
+    <div className='report-page background'>
+      <div className='records-menu'>
         <div className='view-nav'>
 
           <div className='view-choices view-choice-name'>
@@ -174,10 +221,37 @@ export default function Records() {
           </div>
         </div>
 
-        <div className="set-collection">
-          {filteredSets.map((set, index) => (
-            <ViewSet key={index} set={set} />
-          ))}
+        <div className='graph-collection'>
+          <div className='line-graph'>
+            <LineGraph xaxis={dates} yaxis={sales} chart_label={"money over time"} xscale={"date"} yscale={"munny"}></LineGraph>
+          </div>
+
+          <div className='line-graph'>
+            <MultiLineGraph
+              xaxis={dates}
+              datasets={datasets}
+              chart_label="Sales Over Time"
+            />
+          </div>
+
+          <div className='line-graph'>
+            <PieChart
+              labels={["Cupcake", "slop", "Cookies", "Fruits", "Drinks"]}
+              data={[25, 40, 15, 10, 10]}
+              chart_label="Fav Food"
+            ></PieChart>
+          </div>
+
+          <div className='line-graph'>
+            <BarChart
+              labels={["Cupcake", "slop", "Cookies", "Fruits", "Drinks"]}
+              data={[25, 40, 15, 10, 10]}
+              chart_label="Fav Food"
+            ></BarChart>
+          </div>
+
+
+
         </div>
 
       </div>
