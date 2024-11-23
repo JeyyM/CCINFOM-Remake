@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import TestForm from '@/components/TestForm';
+import TestItem from '@/components/TestItem';
 
 // FOR ADDING NEW TESTS
 export default function Tests() {
@@ -24,8 +25,11 @@ export default function Tests() {
   const [tables, setTables] = useState({});
   const [testTypes, setTestTypes] = useState([]);
 
-  const [chosenTest, setChosenTest] = useState({});
+  console.log("TABLES", tables);
+  console.log("TEST TYPES", testTypes);
 
+  const [selectedTest, setSelectedTest] = useState(null);
+  const [formData, setFormData] = useState({});
   const [error, setError] = useState("");
 
   // FOR THE POP-UP
@@ -81,33 +85,104 @@ export default function Tests() {
     setTestTypes(data);
   }
 
-  const handleEdit = async () => {
-    try {
+  // const handleEdit = async (testSet) => {
+  //   try {
+  //     console.log(testSet);
+      
+  //     const res = await fetch('/api/getData', {
+  //       method: 'PUT',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({
+  //         tableName: "ref_test_type",
+  //         formData: testSet,
+  //         primaryKey: "test_name",
+  //         primaryValue: "test_name"
+  //       })
+  //     });
 
-      console.log("chosenTest", chosenTest);
+  //     const response = await res.json();
+  //     console.log(response);
 
-      // const res = await fetch('/api/getData', {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     tableName: "ref_test_type",
-      //     formData: chosenTest,
-      //     primaryKey: "test_name",
-      //     primaryValue: ""
-      //   })
-      // });
+  //     if (!res.ok) {
+  //       // setMessage(response.error);
+  //     } else {
+  //       // setMessage(response.message);
+  //       // onClose();
+  //     }
+  //   } catch (error) {
+  //     console.log(`Error: ${error.message}`);
+  //   }
+  // };
 
-      // const response = await res.json();
+  // const handleEdit = async (item) => {
+  //   const tableLabel = "ref_test_type";
 
-      // if (!res.ok) {
-      //   // setMessage(response.error);
-      // } else {
-      //   // setMessage(response.message);
-      //   // onClose();
-      // }
-    } catch (error) {
-      console.log(`Error: ${error.message}`);
+  //   // console.log(`Selected Item: ${JSON.stringify(item, null, 2)}`);
+  //   // console.log(`Table Name: ${tableName}`);
+  //   // console.log(`Primary Key: ${primaryKey}`);
+    
+  //   const primaryValue = "test_name";
+
+  //   try {
+  //     const res = await fetch('/api/getData', {
+  //       method: 'PUT',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({
+  //         tableName: tableLabel,
+  //         formData:item,
+  //         primaryKey: "test_name",
+  //         primaryValue: " "
+  //       })
+  //     });
+
+  //     const response = await res.json();
+
+  //     if (!res.ok) {
+  //       // setMessage(response.error);
+  //     } else {
+  //       // setMessage(response.message);
+  //       // onClose();
+  //     }
+  //   } catch (error) {
+  //     // setMessage(`Error: ${error.message}`);
+  //   }
+  // };
+
+  const handleEdit = async ({ tableKey, formData, primaryLabel, primaryInput }) => {
+    const res = await fetch('/api/getData', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tableName: tableKey,
+        formData,
+        primaryKey: primaryLabel,
+        primaryValue: primaryInput,
+      }),
+    });
+  
+    if (!res.ok) {
+      console.log("FAILED");
+      // throw new Error('Failed to update data');
     }
+    const response = await res.json();
+  };
+  
+  const handleDelete = async ({ tableName, primaryKey, primaryValue }) => {
+    const res = await fetch('/api/getData', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tableName,
+        primaryKey,
+        primaryValue,
+      }),
+    });
+  
+    if (!res.ok) {
+      throw new Error('Failed to delete data');
+    }
+    const response = await res.json();
+    console.log('Delete Response:', response);
   };
 
 
@@ -116,7 +191,7 @@ export default function Tests() {
     fetchTables();
     fetchContent();
 
-  }, [adding, chosenTest]);
+  }, [adding]);
 
   return (
     <div className='view-appointments-page background'>
@@ -137,31 +212,15 @@ export default function Tests() {
 
         <div className="selection-grid">
           {Object.entries(tables).map(([tableName, columns], index) => {
+
+            console.log("TABLE NAME", tableName);
+
             const matchingTest = testTypes.find(test => {
-              return test.test_name == tableName.toUpperCase()
+              console.log("TEST NAME", test.test_name);
+              return test.test_name == tableName.toLowerCase();
             });
 
-            return <div key={index} className="test-item">
-              <div className="set-name text-medium-dark-bold">{matchingTest.test_name} <span className='text-medium-dark' style={{ marginLeft: "auto" }}>Cost: </span>
-                <input className='form-input text-small-dark' value={matchingTest.test_price} onChange={(e) => {
-                  setTestTypes(prevTestTypes =>
-                    prevTestTypes.map(test =>
-                      test.test_name === matchingTest.test_name
-                        ? { ...test, test_price: e.target.value }
-                        : test
-                    )
-                  );
-                }}
-
-                  style={{ width: "25%", marginRight: "0" }}></input>
-              </div>
-
-              <div className='test-fields'>
-                {columns.map((column, idx) => (
-                  <h3 key={idx} className="text-small-white"><span className="text-small-white-bold">{column.COLUMN_NAME}:</span> ({column.COLUMN_TYPE})</h3>
-                ))}
-              </div>
-            </div>
+            return <TestItem key={index} matchingTest={matchingTest} columns={columns} handleEdit={handleEdit} handleDelete={handleDelete}></TestItem>
           })}
         </div>
 
