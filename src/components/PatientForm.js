@@ -43,7 +43,7 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, patientList, onClose
     const handleSavePatient = async () => {
         const destination = "person";
         setErrorState('');
-
+    
         // Filling out person table
         const inputData = {
             first_name: formData.first_name,
@@ -56,56 +56,114 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, patientList, onClose
             city_name: formData.city,
             province_name: formData.province,
         };
-
+    
         try {
-            //Submit data to the database
-          const res = await fetch('/api/getData?type=add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tableName: destination, formData: inputData })
-          });
-          //checks if submit was successful
-          const response = await res.json();
-          if (res.ok) {
-            setSuccessMessage(response.message);
-            onClose();
-          } else {
-            setErrorState(response.error);
-            onClose();
-          }
+            // Submit data to the person table
+            const res = await fetch('/api/getData?type=add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tableName: destination, formData: inputData })
+            });
+    
+            const response = await res.json();
+            if (res.ok) {
+                const personId = response.person_id;  // Get the person_id from the response
+    
+                // Insert data into the patient table
+                const patientData = {
+                    person_id: personId,  // Use the person_id returned from the person table insertion
+                };
+    
+                const patientRes = await fetch('/api/getData?type=add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tableName: "patient", formData: patientData })
+                });
+    
+                const patientResponse = await patientRes.json();
+                if (patientRes.ok) {
+                    setSuccessMessage("Patient data saved successfully.");
+                    onClose();
+                } else {
+                    setErrorState(patientResponse.error);
+                    onClose();
+                }
+            } else {
+                setErrorState(response.error);
+                onClose();
+            }
         } catch (err) {
-          setErrorState('Failed to insert data');
-          onClose();
+            setErrorState('Failed to insert data');
+            onClose();
         }
+    };
 
-        // Filling out the person_address table
-        // const inputData2 = {
-        //     street_name: formData.street,
-        //     city_name: formData.city,
-        //     province_name: formData.province,
-        // };
-        // try {
-        //     //Submit data to the database
-        //   const res = await fetch('/api/getData?type=add', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ tableName: "person_address", formData: inputData2 })
-        //   });
-        //   //checks if submit was successful
-        //   const response = await res.json();
-        //   if (res.ok) {
-        //     setSuccessMessage(response.message);
+    // const handleSavePatient = async () => {
+    //     const destination = "person";
+    //     setErrorState('');
 
-        //   } else {
-        //     setErrorState(response.error);
-        //   }
-        // } catch (err) {
-        //   setErrorState('Failed to insert data');
-        // }
-        //TODO have to query in order to put in patient table
+    //     // Filling out person table
+    //     const inputData = {
+    //         first_name: formData.first_name,
+    //         last_name: formData.last_name,
+    //         date_of_birth: formData.birthday,
+    //         phone_number: formData.phone,
+    //         email: formData.email,
+    //         sex: formData.sex,
+    //         street_name: formData.street,
+    //         city_name: formData.city,
+    //         province_name: formData.province,
+    //     };
+
+    //     try {
+    //         //Submit data to the database
+    //       const res = await fetch('/api/getData?type=add', {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify({ tableName: destination, formData: inputData })
+    //       });
+    //       //checks if submit was successful
+    //       const response = await res.json();
+    //       if (res.ok) {
+    //         setSuccessMessage(response.message);
+    //         onClose();
+    //       } else {
+    //         setErrorState(response.error);
+    //         onClose();
+    //       }
+    //     } catch (err) {
+    //       setErrorState('Failed to insert data');
+    //       onClose();
+    //     }
+
+    //     // Filling out the person_address table
+    //     // const inputData2 = {
+    //     //     street_name: formData.street,
+    //     //     city_name: formData.city,
+    //     //     province_name: formData.province,
+    //     // };
+    //     // try {
+    //     //     //Submit data to the database
+    //     //   const res = await fetch('/api/getData?type=add', {
+    //     //     method: 'POST',
+    //     //     headers: { 'Content-Type': 'application/json' },
+    //     //     body: JSON.stringify({ tableName: "person_address", formData: inputData2 })
+    //     //   });
+    //     //   //checks if submit was successful
+    //     //   const response = await res.json();
+    //     //   if (res.ok) {
+    //     //     setSuccessMessage(response.message);
+
+    //     //   } else {
+    //     //     setErrorState(response.error);
+    //     //   }
+    //     // } catch (err) {
+    //     //   setErrorState('Failed to insert data');
+    //     // }
+    //     //TODO have to query in order to put in patient table
 
         
-    };
+    // };
 
 
     // SENDS INPUT DATA
