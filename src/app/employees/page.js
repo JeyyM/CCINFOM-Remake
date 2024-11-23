@@ -210,37 +210,71 @@ export default function Employees() {
 
   const [collectionData, setCollectionData] = useState(data);
 
-  const filteredSets = collectionData
-    .filter((set) =>
-      `${set.first_name} ${set.last_name}`
-        .toLowerCase()
-        .includes(searchValue.toLowerCase())
-    )
-    .sort((a, b) => {
-      let comparison = 0;
+  const filteredSets = useMemo(() => {
+    return collectionData
+      .filter((set) =>
+        `${set.first_name} ${set.last_name}`
+          .toLowerCase()
+          .includes(searchValue.toLowerCase())
+      )
+      .sort((a, b) => {
+        let comparison = 0;
+  
+        if (sortChoice === 'id') {
+          comparison = a.id - b.id;
+        } else if (sortChoice === 'last_name') {
+          comparison = a.last_name.localeCompare(b.last_name) || a.first_name.localeCompare(b.first_name);
+        } else if (sortChoice === 'hire_date') {
+          comparison = new Date(a.hire_date) - new Date(b.hire_date);
+        } else if (sortChoice === 'manager_count') {
+          comparison = (a.manager_of?.length || 0) - (b.manager_of?.length || 0);
+        } else if (sortChoice === 'birthday') {
+          comparison = new Date(a.birthday) - new Date(b.birthday);
+        } else if (sortChoice === 'job') {
+          comparison = a.job.localeCompare(b.job);
+        } else if (sortChoice === 'sex') {
+          comparison = a.sex.localeCompare(b.sex);
+        } else if (sortChoice === 'city') {
+          comparison = a.city.localeCompare(b.city);
+        } else if (sortChoice === 'salary') {
+          comparison = a.monthly_salary - b.monthly_salary;
+        }
+  
+        return orderChoice === 'desc' ? -comparison : comparison;
+      });
+  }, [collectionData, searchValue, sortChoice, orderChoice]);
 
-      if (sortChoice === 'id') {
-        comparison = a.id - b.id;
-      } else if (sortChoice === 'last_name') {
-        comparison = a.last_name.localeCompare(b.last_name) || a.first_name.localeCompare(b.first_name);
-      } else if (sortChoice === 'hire_date') {
-        comparison = new Date(a.hire_date) - new Date(b.hire_date);
-      } else if (sortChoice === 'manager_count') {
-        comparison = (a.manager_of?.length || 0) - (b.manager_of?.length || 0);
-      } else if (sortChoice === 'birthday') {
-        comparison = new Date(a.birthday) - new Date(b.birthday);
-      } else if (sortChoice === 'job') {
-        comparison = a.job.localeCompare(b.job);
-      } else if (sortChoice === 'sex') {
-        comparison = a.sex.localeCompare(b.sex);
-      } else if (sortChoice === 'city') {
-        comparison = a.city.localeCompare(b.city);
-      } else if (sortChoice === 'salary') {
-        comparison = a.monthly_salary - b.monthly_salary;
-      }
+  // const filteredSets = collectionData
+  //   .filter((set) =>
+  //     `${set.first_name} ${set.last_name}`
+  //       .toLowerCase()
+  //       .includes(searchValue.toLowerCase())
+  //   )
+  //   .sort((a, b) => {
+  //     let comparison = 0;
 
-      return orderChoice === 'desc' ? -comparison : comparison;
-    });
+  //     if (sortChoice === 'id') {
+  //       comparison = a.id - b.id;
+  //     } else if (sortChoice === 'last_name') {
+  //       comparison = a.last_name.localeCompare(b.last_name) || a.first_name.localeCompare(b.first_name);
+  //     } else if (sortChoice === 'hire_date') {
+  //       comparison = new Date(a.hire_date) - new Date(b.hire_date);
+  //     } else if (sortChoice === 'manager_count') {
+  //       comparison = (a.manager_of?.length || 0) - (b.manager_of?.length || 0);
+  //     } else if (sortChoice === 'birthday') {
+  //       comparison = new Date(a.birthday) - new Date(b.birthday);
+  //     } else if (sortChoice === 'job') {
+  //       comparison = a.job.localeCompare(b.job);
+  //     } else if (sortChoice === 'sex') {
+  //       comparison = a.sex.localeCompare(b.sex);
+  //     } else if (sortChoice === 'city') {
+  //       comparison = a.city.localeCompare(b.city);
+  //     } else if (sortChoice === 'salary') {
+  //       comparison = a.monthly_salary - b.monthly_salary;
+  //     }
+
+  //     return orderChoice === 'desc' ? -comparison : comparison;
+  //   });
 
   const assignManager = (data) => {
     return data.map((employee) => {
@@ -318,7 +352,7 @@ export default function Employees() {
 
           <div className='search-pair'>
             <h2 className='text-medium-white-bold'>SEARCH</h2>
-            <input className='search-bar detail-text-dark' placeholder='Input Patient Name' value={searchValue} onChange={(e) => setSearchValue(e.target.value)}></input>
+            <input className='search-bar detail-text-dark' placeholder='Input Employee Name' value={searchValue} onChange={(e) => setSearchValue(e.target.value)}></input>
 
           </div>
 
@@ -327,9 +361,9 @@ export default function Employees() {
               <div className='view-order'>
                 <h3 className='text-medium-white-bold' style={{ marginRight: "auto", fontSize: "1.5rem" }}>SORT BY</h3>
                 <button className='order-choice text-medium-dark-bold'
-                  onClick={() => setOrderChoice(orderChoice == "desc" ? '' : "desc")}
-                  style={{ fontSize: "1.5rem" }}>
-                  {orderChoice == "desc" ? "DESCENDING" : "ASCENDING"}</button>
+                onClick={() => setOrderChoice(orderChoice === "desc" ? "asc" : "desc")}
+                style={{ fontSize: "1.5rem" }}>
+                {orderChoice === "desc" ? "DESCENDING" : "ASCENDING"}</button>
               </div>
 
               <select
