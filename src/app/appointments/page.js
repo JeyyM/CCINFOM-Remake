@@ -10,7 +10,7 @@ import SelectEmployee from '../../components/SelectEmployee';
 export default function Appointments() {
   // PRESET DATA
   // Change to queried data
-  // NOTE, AN ID IS IMPLEMENTED. NOT SURE HOW ITS GOING TO BE WITH THE ACTUAL DB
+  // NOTE, AN ID IS IMPLEMENTED. NOT SURE HOW IT'S GOING TO BE WITH THE ACTUAL DB
   // THE ID IS BEING ADDED FROM THE FUNCTIONS BY DOING Math.max() SO IT ISNT ACCURATE
   const patientData = [
     {

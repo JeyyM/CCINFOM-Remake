@@ -64,8 +64,9 @@ CREATE TABLE REF_test_type (
 );
 
 CREATE TABLE junction_table (
-    appointment_id INT PRIMARY KEY,
-    test_name VARCHAR(45) NOT NULL UNIQUE,
+    appointment_id INT,
+    test_name VARCHAR(45),
+    PRIMARY KEY (appointment_id, test_name),
     FOREIGN KEY (appointment_id) REFERENCES appointment(appointment_id) ON DELETE CASCADE,
     FOREIGN KEY (test_name) REFERENCES REF_test_type(test_name) ON DELETE RESTRICT
 );

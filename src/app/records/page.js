@@ -1,261 +1,241 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import ViewSet from '@/components/ViewSet';
+import { useState, useEffect } from 'react';
 import LineGraph from '@/components/LineGraph';
 import PieChart from '@/components/PieGraph';
 import BarChart from '@/components/BarGraph';
 import MultiLineGraph from '@/components/MultiLineGraph';
 
+/**
+ * Records Component
+ *
+ * Fetches and displays various statistics using SQL data.
+ */
 export default function Records() {
-  const data = [
-    {
-      id: 1,
-      date: "JAN 01, 2024 08:00 AM",
-      creation_date: "JAN 01, 2024 08:00 AM",
-      updated_date: "JAN 01, 2024 08:00 AM",
-      patient: {
-        name: "Doe, John",
-        email: "johndoe@gmail.com",
-      },
-      staff: {
-        name: "Smith, Alice",
-      },
-      payment: {
-        total: 1000,
-        due: 1000,
-        paid: 0,
-      },
-      status: "scheduled",
-    },
-    {
-      id: 2,
-      date: "JAN 02, 2024 10:30 AM",
-      creation_date: "JAN 01, 2024 09:00 AM",
-      updated_date: "JAN 02, 2024 09:30 AM",
-      patient: {
-        name: "Johnson, Emily",
-        email: "emilyjohnson@gmail.com",
-      },
-      staff: {
-        name: "Brown, Mike",
-      },
-      payment: {
-        total: 1500,
-        due: 1500,
-        paid: 0,
-      },
-      status: "cancelled",
-    },
-    {
-      id: 3,
-      date: "JAN 03, 2024 11:00 AM",
-      creation_date: "JAN 02, 2024 12:00 PM",
-      updated_date: "JAN 03, 2024 10:00 AM",
-      patient: {
-        name: "Taylor, Samantha",
-        email: "samanthataylor@gmail.com",
-      },
-      staff: {
-        name: "Wilson, Mark",
-      },
-      payment: {
-        total: 2000,
-        due: 1000,
-        paid: 1000,
-      },
-      status: "completed",
-    },
-    {
-      id: 4,
-      date: "JAN 04, 2024 02:00 PM",
-      creation_date: "JAN 03, 2024 01:30 PM",
-      updated_date: "JAN 04, 2024 01:00 PM",
-      patient: {
-        name: "Clark, Sarah",
-        email: "sarahclark@gmail.com",
-      },
-      staff: {
-        name: "Evans, David",
-      },
-      payment: {
-        total: 1200,
-        due: 600,
-        paid: 600,
-      },
-      status: "completed",
-    },
-    {
-      id: 5,
-      date: "JAN 05, 2024 04:00 PM",
-      creation_date: "JAN 04, 2024 03:00 PM",
-      updated_date: "JAN 05, 2024 03:30 PM",
-      patient: {
-        name: "Morris, Kevin",
-        email: "kevinmorris@gmail.com",
-      },
-      staff: {
-        name: "Walker, Jessica",
-      },
-      payment: {
-        total: 1800,
-        due: 1800,
-        paid: 0,
-      },
-      status: "scheduled",
-    },
-  ];
+    // State for each graph's data
+    const [appointmentsOverTime, setAppointmentsOverTime] = useState([]);
+    const [revenueTrends, setRevenueTrends] = useState([]);
+    const [testDistribution, setTestDistribution] = useState([]);
+    const [revenueByStaff, setRevenueByStaff] = useState([]);
 
-  // SORTING DETAILS
-  const [viewChoice, setViewChoice] = useState('scheduled');
-  const [sortChoice, setSortChoice] = useState('appointment_date');
-  const [orderChoice, setOrderChoice] = useState('desc');
+    // States for filtering and sorting
+    const [viewChoice, setViewChoice] = useState('scheduled'); // Filter by status
+    const [sortChoice, setSortChoice] = useState('appointment_date'); // Sorting field
+    const [orderChoice, setOrderChoice] = useState('desc'); // Sorting order
 
-  const handleSortChange = (e) => {
-    setSortChoice(e.target.value);
-  };
+    // Fetch appointments over time
+    const fetchAppointmentsOverTime = async () => {
+        const tableName = "appointment";
+        const columns = "DATE_FORMAT(appointment_date, '%Y-%m-%d') AS day, COUNT(*) AS total_appointments";
+        const groupBy = "day";
+        const orderBy = "day";
 
-  const filteredSets = data
-    .filter((set) =>
-      set.status === viewChoice
-    )
-    .sort((a, b) => {
-      let comparison = 0;
+        try {
+            const response = await fetch(
+                `/api/getData?type=query&table=${tableName}&columns=${columns}&groupBy=${groupBy}&orderBy=${orderBy}`
+            );
+            if (!response.ok) throw new Error('Failed to fetch appointments over time');
 
-      if (sortChoice === 'appointment_date') {
-        comparison = new Date(a.date) - new Date(b.date);
-      } else if (sortChoice === 'creation_date') {
-        comparison = new Date(a.creation_date) - new Date(b.creation_date);
-      } else if (sortChoice === 'updated_date') {
-        comparison = new Date(a.updated_date) - new Date(b.updated_date);
-      } else if (sortChoice === 'total') {
-        comparison = a.payment.total - b.payment.total;
-      } else if (sortChoice === 'last_name') {
-        comparison = a.patient.name.localeCompare(b.patient.name);
-      }
+            const result = await response.json();
+            setAppointmentsOverTime(result);
+        } catch (error) {
+            console.error('Error fetching appointments over time:', error);
+        }
+    };
 
-      return orderChoice === 'desc' ? -comparison : comparison;
-    });
+    // Fetch revenue trends by status
+    const fetchRevenueTrends = async () => {
+        const tableName = "appointment";
+        const joins = JSON.stringify([{ table: "bill", on: "appointment.appointment_id = bill.appointment_id", type: "JOIN" }]);
+        const columns = "DATE_FORMAT(appointment_date, '%Y-%m-%d') AS day, appointment.status AS status, SUM(total_paid) AS total_revenue";
+        const groupBy = "day, status";
+        const orderBy = "day, status";
 
+        try {
+            const response = await fetch(
+                `/api/getData?type=query&table=${tableName}&columns=${columns}&groupBy=${groupBy}&orderBy=${orderBy}&joins=${joins}`
+            );
+            if (!response.ok) throw new Error('Failed to fetch revenue trends');
 
-  var dates = [
-    "1990-01-01",
-    "1990-01-15",
-    "1990-02-01",
-    "1990-02-14",
-    "1990-03-01",
-    "1990-03-15",
-    "1990-04-01",
-    "1990-04-15",
-    "1990-05-01",
-    "1990-05-15",
-  ]
+            const result = await response.json();
+            setRevenueTrends(result);
+        } catch (error) {
+            console.error('Error fetching revenue trends:', error);
+        }
+    };
 
-  const sales = [
-    500,
-    600,
-    900,
-    100,
-    1200,
-    800,
-    450,
-    1100,
-    750,
-    950,
-  ];
+    // Fetch test type distribution
+    const fetchTestDistribution = async () => {
+        const tableName = "junction_table";
+        const columns = "test_name, COUNT(*) AS test_count";
+        const groupBy = "test_name";
+        const orderBy = "test_count DESC";
 
-  const datasets = [
-    {
-      label: 'Product A Sales',
-      data: [200, 300, 400, 350, 450, 500],
-    },
-    {
-      label: 'Product B Sales',
-      data: [150, 250, 350, 400, 300, 200],
-    },
-    {
-      label: 'Product C Sales',
-      data: [100, 200, 150, 300, 400, 450],
-    }
-  ];
+        try {
+            const response = await fetch(
+                `/api/getData?type=query&table=${tableName}&columns=${columns}&groupBy=${groupBy}&orderBy=${orderBy}`
+            );
+            if (!response.ok) throw new Error('Failed to fetch test type distribution');
 
+            const result = await response.json();
+            setTestDistribution(result);
+        } catch (error) {
+            console.error('Error fetching test distribution:', error);
+        }
+    };
 
-  return (
-    <div className='report-page background'>
-      <div className='records-menu'>
-        <div className='view-nav'>
+    // Fetch revenue by staff
+    const fetchRevenueByStaff = async () => {
+        const tableName = "staff";
+        const joins = JSON.stringify([
+            { table: "person", on: "staff.person_id = person.person_id", type: "JOIN" },
+            { table: "appointment", on: "staff.person_id = appointment.staff_id", type: "JOIN" },
+            { table: "bill", on: "appointment.appointment_id = bill.appointment_id", type: "JOIN" }
+        ]);
+        const columns = "CONCAT(person.first_name, ' ', person.last_name) AS staff_name, SUM(bill.total_paid) AS total_revenue";
+        const groupBy = "staff_name";
+        const orderBy = "total_revenue DESC";
 
-          <div className='view-choices view-choice-name'>
-            <button className='text-medium-white view-choice-name'
-              style={{ fontWeight: viewChoice === 'scheduled' ? "600" : "400" }}
-              onClick={() => setViewChoice('scheduled')}>SCHEDULED</button>
-            <div className='view-divider'></div>
-            <button className='text-medium-white view-choice-name'
-              style={{ fontWeight: viewChoice === 'completed' ? "600" : "400" }}
-              onClick={() => setViewChoice('completed')}>COMPLETED</button>
-            <div className='view-divider'></div>
-            <button className='text-medium-white view-choice-name'
-              style={{ fontWeight: viewChoice === 'cancelled' ? "600" : "400" }}
-              onClick={() => setViewChoice('cancelled')}>CANCELLED</button>
-          </div>
+        try {
+            const response = await fetch(
+                `/api/getData?type=query&table=${tableName}&columns=${columns}&groupBy=${groupBy}&orderBy=${orderBy}&joins=${joins}`
+            );
+            if (!response.ok) throw new Error('Failed to fetch revenue by staff');
 
-          <div className='view-sort-by'>
-            <div className='view-order'>
-              <h3 className='text-medium-white-bold' style={{ marginRight: "auto", fontSize: "1.5rem" }}>SORT BY</h3>
-              <button className='order-choice text-medium-dark-bold'
-                onClick={() => setOrderChoice(orderChoice == "desc" ? '' : "desc")}
-                style={{ fontSize: "1.5rem" }}>
-                {orderChoice == "desc" ? "DESCENDING" : "ASCENDING"}</button>
+            const result = await response.json();
+            setRevenueByStaff(result);
+        } catch (error) {
+            console.error('Error fetching revenue by staff:', error);
+        }
+    };
+
+    // Fetch all data on component mount
+    useEffect(() => {
+        fetchAppointmentsOverTime();
+        fetchRevenueTrends();
+        fetchTestDistribution();
+        fetchRevenueByStaff();
+    }, []);
+
+    return (
+        <div className="report-page background">
+            <div className="records-menu">
+                {/* Navigation for filtering by status */}
+                <div className="view-nav">
+                    <div className="view-choices view-choice-name">
+                        <button
+                            className="text-medium-white view-choice-name"
+                            style={{ fontWeight: viewChoice === 'scheduled' ? '600' : '400' }}
+                            onClick={() => setViewChoice('scheduled')}
+                        >
+                            SCHEDULED
+                        </button>
+                        <div className="view-divider"></div>
+                        <button
+                            className="text-medium-white view-choice-name"
+                            style={{ fontWeight: viewChoice === 'completed' ? '600' : '400' }}
+                            onClick={() => setViewChoice('completed')}
+                        >
+                            COMPLETED
+                        </button>
+                        <div className="view-divider"></div>
+                        <button
+                            className="text-medium-white view-choice-name"
+                            style={{ fontWeight: viewChoice === 'cancelled' ? '600' : '400' }}
+                            onClick={() => setViewChoice('cancelled')}
+                        >
+                            CANCELLED
+                        </button>
+                    </div>
+
+                    {/* Sorting options */}
+                    <div className="view-sort-by">
+                        <div className="view-order">
+                            <h3 className="text-medium-white-bold" style={{ marginRight: "auto", fontSize: '1.5rem' }}>
+                                SORT BY
+                            </h3>
+                            <button
+                                className="order-choice text-medium-dark-bold"
+                                onClick={() => setOrderChoice(orderChoice === 'desc' ? '' : 'desc')}
+                                style={{ fontSize: '1.5rem' }}
+                            >
+                                {orderChoice === 'desc' ? 'DESCENDING' : 'ASCENDING'}
+                            </button>
+                        </div>
+
+                        <select
+                            value={sortChoice}
+                            onChange={(e) => setSortChoice(e.target.value)}
+                            className="dropdown-item-2 detail-text-dark"
+                        >
+                            <option value="appointment_date">Schedule Date</option>
+                            <option value="updated_date">Creation Date</option>
+                            <option value="total">Total Bill</option>
+                            <option value="last_name">Name</option>
+                        </select>
+                    </div>
+                </div>
+
+                {/* Graphs Section */}
+                <div className="graph-collection">
+                    {/* Line Graph - Appointments Over Time */}
+                    <div className="line-graph">
+                        <LineGraph
+                            xaxis={appointmentsOverTime.map((item) => item.day)}
+                            yaxis={appointmentsOverTime.map((item) => item.total_appointments)}
+                            chart_label="Appointments Over Time"
+                            xscale="time"
+                            yscale="appointments"
+                        />
+                    </div>
+
+                    {/* Multi-Line Graph - Revenue Trends by Status */}
+                    <div className="line-graph">
+                        <MultiLineGraph
+                            xaxis={[...new Set(revenueTrends.map((item) => item.day))]}
+                            datasets={[
+                                {
+                                    label: 'Scheduled',
+                                    data: revenueTrends
+                                        .filter((item) => item.status === 'Scheduled')
+                                        .map((item) => item.total_revenue),
+                                },
+                                {
+                                    label: 'Completed',
+                                    data: revenueTrends
+                                        .filter((item) => item.status === 'Completed')
+                                        .map((item) => item.total_revenue),
+                                },
+                                {
+                                    label: 'Cancelled',
+                                    data: revenueTrends
+                                        .filter((item) => item.status === 'Cancelled')
+                                        .map((item) => item.total_revenue),
+                                },
+                            ]}
+                            chart_label="Revenue Trends by Status"
+                        />
+                    </div>
+
+                    {/* Pie Chart - Distribution of Test Types */}
+                    <div className="pie-graph">
+                        <PieChart
+                            labels={testDistribution.map((item) => item.test_name)}
+                            data={testDistribution.map((item) => item.test_count)}
+                            chart_label="Test Type Distribution"
+                        />
+                    </div>
+
+                    {/* Bar Chart - Revenue by Staff */}
+                    <div className="bar-graph">
+                        <BarChart
+                            labels={revenueByStaff.map((item) => item.staff_name)}
+                            data={revenueByStaff.map((item) => item.total_revenue)}
+                            chart_label="Revenue by Staff"
+                        />
+                    </div>
+                </div>
             </div>
-
-            <select
-              value={sortChoice}
-              onChange={handleSortChange}
-              className="dropdown-item-2 detail-text-dark">
-              <option value="appointment_date">Schedule Date</option>
-              <option value="updated_date">Creation Date</option>
-              <option value="total">Total Bill</option>
-              <option value="last_name">Name</option>
-            </select>
-          </div>
         </div>
-
-        <div className='graph-collection'>
-          <div className='line-graph'>
-            <LineGraph xaxis={dates} yaxis={sales} chart_label={"money over time"} xscale={"date"} yscale={"munny"}></LineGraph>
-          </div>
-
-          <div className='line-graph'>
-            <MultiLineGraph
-              xaxis={dates}
-              datasets={datasets}
-              chart_label="Sales Over Time"
-            />
-          </div>
-
-          <div className='pie-graph'>
-            <PieChart
-              labels={["Cupcake", "slop", "Cookies", "Fruits", "Drinks"]}
-              data={[25, 40, 15, 10, 10]}
-              chart_label="Fav Food"
-            ></PieChart>
-          </div>
-
-          <div className='line-graph'>
-            <BarChart
-              labels={["Cupcake", "slop", "Cookies", "Fruits", "Drinks"]}
-              data={[25, 40, 15, 10, 10]}
-              chart_label="Fav Food"
-            ></BarChart>
-          </div>
-          
-
-
-
-        </div>
-
-      </div>
-    </div>
-  );
+    );
 }
