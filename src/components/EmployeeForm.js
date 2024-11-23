@@ -53,6 +53,7 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
 
         return Object.keys(errors).length === 0;
     };
+
     const handleSaveEmployee = async () => {
         const destination = "person";
         setErrorState('');
@@ -68,69 +69,49 @@ const EmployeeForm = ({ selectedEmployee, setSelectedEmployee, onClose, handleSa
             city_name: formData.city,
             province_name: formData.province,
         };
-        try {
-            //Submit data to the database
-          const res = await fetch('/api/getData?type=add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tableName: destination, formData: inputData })
-          });
-          //checks if submit was successful
-          const response = await res.json();
-          if (res.ok) {
-            setSuccessMessage2(response.message);
-            onClose();
-          } else {
-            setErrorState(response.error);
-          }
-        } catch (err) {
-          setErrorState('Failed to insert data');
-        }
-        /*
-        try {
-            //Submit data to the database
-          const res = await fetch('/api/getData?type=add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tableName: destination, formData: inputData })
-          });
-          //checks if submit was successful
-          const response = await res.json();
-          if (res.ok) {
-            setSuccessMessage2(response.message);
-            onClose();
-          } else {
-            setErrorState(response.error);
-          }
-        } catch (err) {
-          setErrorState('Failed to insert data');
-        }
-        
-        // Filling out the ref_job table
-        const inputData2 = {
-            job_name: formData.job,
-        };
-        try {
-            //Submit data to the database
-          const res = await fetch('/api/getData?type=add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tableName: "REF_job", formData: inputData2 })
-          });
-          //checks if submit was successful
-          const response = await res.json();
-          if (res.ok) {
-            setSuccessMessage(response.message);
 
-          } else {
-            setErrorState(response.error);
-          }
+        try {
+            // Insert into person table
+            const res = await fetch('/api/getData?type=add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tableName: destination, formData: inputData })
+            });
+    
+            const response = await res.json();
+            if (res.ok) {
+                const personId = response.person_id;  // Get the person_id from the response
+                
+                // Insert into staff table
+                const staffData = {
+                    person_id: personId,
+                    job_name: formData.job,
+                    monthly_salary: formData.monthly_salary,
+                    status: 'Hired',  // Default status (can be dynamic based on form data)
+                };
+    
+                const staffRes = await fetch('/api/getData?type=add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tableName: "staff", formData: staffData })
+                });
+    
+                const staffResponse = await staffRes.json();
+                if (staffRes.ok) {
+                    setSuccessMessage2(staffResponse.message);
+                    onClose();
+                } else {
+                    setErrorState(staffResponse.error);
+                }
+    
+            } else {
+                setErrorState(response.error);
+            }
         } catch (err) {
-          setErrorState('Failed to insert data');
+            setErrorState('Failed to insert data');
         }
-        */
-        //TODO: Have to query to put in staff table
     };
+
     // SENDS FORM DATA TO THE ORIGINAL PAGE
     const handleSubmit = (e) => {
         e.preventDefault();
