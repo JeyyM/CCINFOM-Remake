@@ -131,14 +131,21 @@ export async function POST(req) {
       const placeholders = values.map(() => '?').join(', ');
 
       const query = `INSERT INTO \`${tableName}\` (${columns}) VALUES (${placeholders})`;
-      await db.query(query, values);
+      const result = await db.query(query, values);
 
-      return new Response(JSON.stringify({ success: true, message: 'Data inserted successfully' }), { status: 200 });
+      // If inserted successfully, get the last inserted id (for AUTO_INCREMENT field)
+      const personId = result.insertId;  // This is the ID generated for the "person" table entry
+
+      return new Response(
+        JSON.stringify({ success: true, message: 'Data inserted successfully', person_id: personId }), 
+        { status: 200 }
+      );
     } catch (error) {
       console.error('Database insertion error:', error);
       return new Response(JSON.stringify({ error: error.message }), { status: 400 });
     }
-    // MAKE A TABLE
+
+    // MAKE TABLE
   }else if (type === "create") {
     try {
       const fieldDefinitions = formData.map((field) => {
