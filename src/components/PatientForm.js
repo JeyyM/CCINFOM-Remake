@@ -39,7 +39,27 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, patientList, onClose
 
         return Object.keys(errors).length === 0;
     };
-
+    const fetchLatestPersonId = async () => {
+        const tableName = "person";
+        const columns = "MAX(person_id) AS person_id"; // Query for the maximum person_id
+    
+        try {
+            const response = await fetch(
+                `/api/getData?type=query&table=${tableName}&columns=${columns}`
+            );
+    
+            const data = await response.json();
+            console.log("Fetched person_id:", data);
+            if (response.ok && data.length > 0) {
+                return data[0].person_id;
+            } else {
+                throw new Error('Failed to fetch the latest person_id');
+            }
+        } catch (error) {
+            console.error("Error fetching the latest person_id:", error.message);
+            throw error;
+        }
+    };
     const handleSavePatient = async () => {
         const destination = "person";
         setErrorState('');
@@ -96,6 +116,33 @@ const PatientForm = ({ selectedPatient, setSelectedPatient, patientList, onClose
             setErrorState('Failed to insert data');
             onClose();
         }
+
+        const destination2 = "patient"
+        const person_id = await fetchLatestPersonId();
+        const inputData2 = {
+            person_id: person_id,
+        }
+        console.log("Fetched person_id:", person_id);
+        // Filling out the ref_job table
+        try {
+            //Submit data to the database
+          const res = await fetch('/api/getData?type=add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tableName: destination2, formData: inputData2 })
+          });
+          //checks if submit was successful
+          const response = await res.json();
+          if (res.ok) {
+            setSuccessMessage(response.message);
+
+          } else {
+            setErrorState(response.error);
+          }
+        } catch (err) {
+          setErrorState('Failed to insert data');
+        }
+
     };
 
     // const handleSavePatient = async () => {
