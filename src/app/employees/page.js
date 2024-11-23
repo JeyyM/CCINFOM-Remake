@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import EmployeeSet from '@/app/components/EmployeeSet';
-import EmployeeForm from '@/app/components/EmployeeForm';
-import SelectEmployee from '@/app/components/SelectEmployee';
+import EmployeeSet from '@/components/EmployeeSet';
+import EmployeeForm from '@/components/EmployeeForm';
+import SelectEmployee from '@/components/SelectEmployee';
 
 export default function Employees() {
   const [sortChoice, setSortChoice] = useState('id');

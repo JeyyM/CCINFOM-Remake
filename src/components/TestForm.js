@@ -12,6 +12,7 @@ const TestForm = ({ onClose }) => {
     // State to manage the form fields
     const [formData, setFormData] = useState([
         { name: 'ID', nullable: false, dataType: 'INT', isPrimaryKey: true, autoIncrement: true }, // Default primary key field
+        { name: 'appointment_id', nullable: false, dataType: 'INT', isPrimaryKey: false, autoIncrement: false }, // Appointment id field
         { name: '', nullable: true, dataType: 'VARCHAR(45)', isPrimaryKey: false, autoIncrement: false },
     ]);
 
@@ -85,7 +86,7 @@ const TestForm = ({ onClose }) => {
 
         const inputData = {
             test_name: tableName,
-            test_price: testPrice,
+            test_price: testPrice
         };
 
         try {
@@ -173,7 +174,7 @@ const TestForm = ({ onClose }) => {
                     </div>
 
                     {formData.map((field, index) => {
-                        if (index === 0) return null; // Skip primary key field
+                        if (index === 0 || index === 1) return null; // Skip primary key field
                         return (
                             <div key={index} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: "center", justifyContent: "center" }}>
                                 <div className="form-group">
@@ -210,10 +211,10 @@ const TestForm = ({ onClose }) => {
                         );
                     })}
 
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-                    {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-                    {error2 && <p style={{ color: 'red' }}>{error2}</p>}
-                    {successMessage2 && <p style={{ color: 'green' }}>{successMessage2}</p>}
+                    {error && <p className='warning-text '>{error}</p>}
+                    {/* {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>} */}
+                    {error2 && <p className='warning-text'>{error2}</p>}
+                    {/* {successMessage2 && <p style={{ color: 'green' }}>{successMessage2}</p>} */}
 
                     <div className="form-row">
                         <button type="button" className="large-button-outline detail-text-white" onClick={onClose}>

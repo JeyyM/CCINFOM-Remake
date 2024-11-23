@@ -64,13 +64,6 @@ export default function TimeDropdown({
           </option>
         ))}
       </select>
-
-      <div>
-        {/* <h1>
-          Curr Time: {get24Hours(selectedHour, selectedPeriod)}:{selectedMinute.padStart(2, '0')}
-        </h1> */}
-        
-      </div>
     </div>
   );
 }

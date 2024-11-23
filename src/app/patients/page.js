@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import PatientSet from '@/app/components/PatientSet';
-import PatientForm from '@/app/components/PatientForm';
+import PatientSet from '@/components/PatientSet';
+import PatientForm from '@/components/PatientForm';
 
 export default function Patients() {
   const data = [
