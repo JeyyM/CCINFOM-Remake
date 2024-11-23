@@ -27,7 +27,7 @@ CREATE TABLE staff (
     person_id INT PRIMARY KEY,
     job_name VARCHAR(50) NOT NULL,
 	monthly_salary DECIMAL(10, 2) NOT NULL,
-    status ENUM('Hired', 'Fired') NOT NULL DEFAULT 'Active',
+    status ENUM('Hired', 'Fired') NOT NULL DEFAULT 'Hired',
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     CONSTRAINT valid_salary CHECK (monthly_salary >= 0)
 );
